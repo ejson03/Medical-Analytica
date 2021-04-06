@@ -80,6 +80,10 @@ services:
       - "IPC_LOCK"
     depends_on: 
       - bigchaindb
+    volumes:
+      - ./vault/config:/vault/config
+      - ./vault/policies:/vault/policies
+      - ./vault/data:/vault/data
 
   neo4j:
     image: neo4j
