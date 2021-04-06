@@ -117,7 +117,6 @@ export const rasaHistory = async (req: Request, res: Response) => {
    const username = req.body.rasa;
    try {
       let data = await rasaService.getRasaHistory(username);
-      console.log(data);
       if (data.length != 0) {
          return res.render('doctor/history.ejs', {
             doc: data,

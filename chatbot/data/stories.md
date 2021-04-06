@@ -1,3 +1,39 @@
+## story_1_search_treat_simple   
+* greet
+   - utter_greet
+* search_treat{"disease": "pertussis"}
+   - action_search_treat
+* goodbye
+   - utter_goodbye
+
+## story_2_search_symptom_simple
+* greet
+   - utter_greet
+* search_symptom{"disease": "pertussis"}
+   - action_search_symptom
+* goodbye
+   - utter_goodbye
+
+## story_11_search_disease_dept_simple
+* greet
+   - utter_greet
+* search_disease_dept{"disease": "pertussis"}
+   - action_search_disease_dept
+* goodbye
+   - utter_goodbye
+
+## story_14
+* search_treat{"disease": "Allergic dermatitis"}
+   - action_search_treat
+   
+## story_16
+* search_symptom{"disease": "Allergic dermatitis"}
+   - action_search_symptom
+   
+## story_24
+* search_disease_dept{"disease": "Allergic dermatitis"}
+   - action_search_disease_dept
+   
 ## story 4
 * greet
     - utter_greet

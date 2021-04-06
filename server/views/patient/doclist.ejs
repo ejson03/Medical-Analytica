@@ -223,6 +223,7 @@
     }
 
     function prescribeModal(doctor,records, app){
+
       let inner = "";
       let table = "";
       const element = document.getElementById(app);
@@ -237,9 +238,8 @@
       const labelend = `</tbody>
                                 </table>
                               </div>`
-
-      for (const record of records){ 
-        console.log(records)
+      console.log(records[0])
+      for (const record of records.records){ 
         const mainDiv = ` <tr>
                             <td>${record.prescription}</td>
                             <td>${record.description}</td>

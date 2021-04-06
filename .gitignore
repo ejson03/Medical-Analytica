@@ -22,5 +22,13 @@ env
 **/tests/
 .bigchaindb/
 bigchaindb.config.json
+.env
+__pycache__
+node_modules/
+dist/
+package-lock.json
+rasa/
+experimental/
+index/
 
 

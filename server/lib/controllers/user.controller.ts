@@ -113,10 +113,10 @@ export const uncheck = async (req: Request, res: Response) => {
 
 export const prescription = async (req: Request, res: Response) => {
    const demail = req.body.value;
-   console.log(demail)
+   console.log(demail);
    try {
       const data = await getPrescription(req.session?.user.user.username, demail, req.session?.user.secrets.secretKey);
-      console.log(data)
+      console.log(data);
       return res.json({ records: data });
    } catch (err) {
       console.error(err);
