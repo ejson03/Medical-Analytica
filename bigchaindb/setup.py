@@ -60,7 +60,6 @@ tests_require = [
     'flake8',
     'flake8-quotes==0.8.1',
     'hypothesis>=5.3.0',
-    # Removed pylint because its GPL license isn't Apache2-compatible
     'pytest>=3.0.0',
     'pytest-cov>=2.2.1',
     'pytest-mock',
@@ -72,7 +71,6 @@ tests_require = [
 ] + docs_require
 
 install_requires = [
-    # TODO Consider not installing the db drivers, or putting them in extras.
     'pymongo~=3.6',
     'cryptoconditions==0.8.0',
     'python-rapidjson~=0.6.0',

@@ -28,7 +28,7 @@ class GridTrackerStore(TrackerStore):
         password=None,
         auth_source="admin",
         collection="conversations",
-        neo4j_url="bolt://192.168.99.100:7687",
+        neo4j_url=os.environ.get("NEO4J_URL") or "bolt://192.168.99.100:7687",
         event_broker=None,
     ):
         from pymongo.database import Database

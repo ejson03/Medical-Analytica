@@ -15,7 +15,6 @@ from typing import Text, Callable, Dict, List, Any, Optional
 from py2neo import Graph,Node,Relationship
 import pandas as pd
 
-MONGODB_STRING = environ.get("MONGO_URL", "mongodb://localhost:27017")
 client = MongoClient(MONGODB_STRING)
 disease_file = './assets/disease.txt'
 disease_names = [i.strip() for i in open(disease_file, 'r', encoding='UTF-8').readlines()]

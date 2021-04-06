@@ -1,13 +1,13 @@
 ### localhost
 action_endpoint:
-  url: "http://action:5055/webhook"
+  url: ${ACTION_URL}
 
 
 tracker_store:
   type: custom.custom_tracker.GridTrackerStore
-  url: mongodb://192.168.99.100:27017
+  url: ${MONGO_URL}
   db: rasa
-  neo4j_url: bolt://92.168.99.100:7687
+  neo4j_url: ${NEO4J_URL}
 
  
  
