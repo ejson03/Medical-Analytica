@@ -171,8 +171,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 .vscode/
-models/
-models
+
 rasa
 out.log
 fetchable_auth_keys.json
