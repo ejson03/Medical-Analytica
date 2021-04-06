@@ -23,27 +23,27 @@ For deploying
 npm run tag
 ```
 
+# To Do
+Add .env in Knowledge base folder with url of neo4j
+Add big .env in node folder (redundant)
+Make env.bat in root folder
 
-# API
-
-## 1. Patient (/patient)
-
-| Route                   | Arguments                          | Type   | Description                     | Permissions |
-| :---------------------- | :--------------------------------- | :----- | :------------------------------ | :---------- |
-| /                   |                                    | GET    | Get Current User Details        | None        |
-
-
-## 2. Doctor (/doctor)
-
-| Route                   | Arguments                          | Type   | Description                     | Permissions |
-| :---------------------- | :--------------------------------- | :----- | :------------------------------ | :---------- |
-| /                   |                                    | GET    | Get Current User Details        | None        |
-
-## 2. Common (/common)
-
-| Route                   | Arguments                          | Type   | Description                     | Permissions |
-| :---------------------- | :--------------------------------- | :----- | :------------------------------ | :---------- |
-| /                   |                                    | GET    | Get Current User Details        | None        |
+```
+set VAULT_TOKEN=
+set VAULT_DEV_ROOT_TOKEN_ID=
+set VAULT_URL=
+set MONGO_URL=
+set NEO4J_URL=
+set BIGCHAIN_URL=
+set PORT=
+set SECRET=
+set IPFS_URL=
+set WEATHER_KEY=t
+set WEATHER_ID=
+set APP_URL=
+set ACTION_URL=
+set RASA_URL=
+```
 
 
 

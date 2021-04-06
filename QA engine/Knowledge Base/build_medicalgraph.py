@@ -2,12 +2,15 @@ import os
 import json
 import pandas as pd
 from py2neo import Graph,Node
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class MedicalGraph:
     def __init__(self):
 
         self.g = Graph(
-            host="192.168.99.100",  
+            host=os.getenv("NEO4J_URL") or "192.168.99.100",  
             http_port=7474,  
             user="neo4j",  
             password="password")

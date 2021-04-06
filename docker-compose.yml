@@ -2,6 +2,7 @@ version: "3.7"
 services:
   mongodb:
     image: mongo:latest
+    container_name: mongodb
     # environment:
     #   MONGO_INITDB_ROOT_USERNAME: "${MONGO_USER}"
     #   MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASS}"
@@ -11,6 +12,7 @@ services:
     restart: always
 
   bigchaindb:
+    container_name: bigchaindb
     depends_on:
       - mongodb
       - tendermint
@@ -57,6 +59,7 @@ services:
     
   tendermint:
     image: tendermint/tendermint:v0.31.5
+    container_name: tendermint
     volumes:
       - tm_data:/tendermint
     entrypoint: ""
@@ -80,6 +83,7 @@ services:
 
   neo4j:
     image: neo4j
+    container_name: neo4j
     ports: 
         - "7474:7474"
         - "7373:7373"
