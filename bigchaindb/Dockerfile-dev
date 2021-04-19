@@ -1,6 +1,6 @@
 ARG python_version=3.6
 FROM python:${python_version}
-LABEL maintainer "devs@bigchaindb.com"
+LABEL maintainer "contact@ipdb.global"
 
 RUN apt-get update \
     && apt-get install -y vim \
@@ -32,6 +32,5 @@ ENV BIGCHAINDB_CI_ABCI ${abci_status}
 RUN mkdir -p /usr/src/app
 COPY . /usr/src/app/
 WORKDIR /usr/src/app
-RUN chmod +x /usr/src/app/.ci/entrypoint.sh
 RUN pip install -e .[dev]
 RUN bigchaindb -y configure
