@@ -80,6 +80,8 @@ services:
       - "IPC_LOCK"
     depends_on: 
       - bigchaindb
+    environment:
+      VAULT_LOCAL_CONFIG: '{"backend" : {"file" : {"path" : "/vault/file"}}}'
     volumes:
       - ./vault/config:/vault/config
       - ./vault/policies:/vault/policies
