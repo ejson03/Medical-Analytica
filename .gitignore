@@ -7,9 +7,7 @@ rasa
 dist
 .vscode
 dummy-code
-.env
 env.json
-env.bat
 test
 env
 .vscode/

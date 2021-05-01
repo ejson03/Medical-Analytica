@@ -97,52 +97,52 @@ services:
     environment:
         - NEO4J_AUTH=none
 
-  # server:
-  #   container_name: rasa-server
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #     target: chatbot
-  #   volumes:
-  #     - ./chatbot:/app
-  #   ports:
-  #     - 5005:5005
-  #   depends_on:
-  #     - action
+  server:
+    container_name: rasa-server
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: chatbot
+    volumes:
+      - ./chatbot:/app
+    ports:
+      - 5005:5005
+    depends_on:
+      - action
 
       
-  # action:
-  #   container_name: rasa-action-server
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #     target: action
-  #   ports:
-  #     - "5055:5055"
-  #   volumes:
-  #     - ./actions:/app
+  action:
+    container_name: rasa-action-server
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: action
+    ports:
+      - "5055:5055"
+    volumes:
+      - ./actions:/app
  
 
-  # main:
-  #   container_name: main
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #     target: app-backend
-  #   volumes:
-  #     - ./server:/app/server
-  #   command: npm run deploy
-  #   ports:
-  #     - 5000:5000
-  #   depends_on:
-  #     - vault
-  #     - server
+  main:
+    container_name: main
+    env_file:
+      - .env
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: app-backend
+    volumes:
+      - ./server:/app/server
+    command: npm run deploy
+    ports:
+      - 5000:5000
+    depends_on:
+      - vault
+      - server
  
 
   # nginx:

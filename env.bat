@@ -1,0 +1,14 @@
+set VAULT_TOKEN=myroot
+set VAULT_DEV_ROOT_TOKEN_ID=myroot
+set VAULT_URL=http://localhost:8200
+set MONGO_URL=mongodb://localhost:27017
+set NEO4J_URL=bolt://localhost:7687
+set BIGCHAIN_URL=http://localhost:9984/api/v1/
+set PORT=5000
+set SECRET=medicalanalytica
+set IPFS_URL=ipfs.infura.io
+set WEATHER_KEY=twQ8s3NiYo2MCBZfj1pZAQ
+set WEATHER_ID=JnnC8L7yA6ebC44rCiuj
+set APP_URL=http://localhost:5000
+set ACTION_URL=http://localhost:5055/webhook
+set RASA_URL=http://localhost:5005
