@@ -23,27 +23,32 @@ For deploying
 npm run tag
 ```
 
-# To Do
-Add .env in Knowledge base folder with url of neo4j
-Add big .env in node folder (redundant)
-Make env.bat in root folder
+To build 
 
+Using eveything in Docker 
 ```
-set VAULT_TOKEN=
-set VAULT_DEV_ROOT_TOKEN_ID=
-set VAULT_URL=
-set MONGO_URL=
-set NEO4J_URL=
-set BIGCHAIN_URL=
-set PORT=
-set SECRET=
-set IPFS_URL=
-set WEATHER_KEY=
-set WEATHER_ID=
-set APP_URL=
-set ACTION_URL=
-set RASA_URL=
+./scripts/build_docker.bat
 ```
+
+Running rasa and node in local 
+```
+./scripts/build_local.bat
+```
+
+To just run local servers if local and start docker
+```
+./scripts/local.bat
+```
+
+To just run local servers if local 
+```
+./scripts/runserver.bat
+```
+
+
+
+
+
 
 
 

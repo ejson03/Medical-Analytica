@@ -10,7 +10,7 @@ class MedicalGraph:
     def __init__(self):
 
         self.g = Graph(
-            host=os.getenv("NEO4J_URL") or "192.168.99.100",  
+            host=os.getenv("NEO4J_URL") or "localhost",  
             http_port=7474,  
             user="neo4j",  
             password="password")
