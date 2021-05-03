@@ -80,6 +80,7 @@ services:
       - "IPC_LOCK"
     depends_on: 
       - bigchaindb
+      - neo4j
     environment:
       VAULT_LOCAL_CONFIG: '{"backend" : {"file" : {"path" : "/vault/file"}}}'
     volumes:
