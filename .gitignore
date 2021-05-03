@@ -13,7 +13,6 @@ env
 .vscode/
 **/__pycache__/
 **/dist/
-**/.env
 **/server.crt
 **/server.key
 vault/

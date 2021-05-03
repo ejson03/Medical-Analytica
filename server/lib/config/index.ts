@@ -1,6 +1,6 @@
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 
-dotenv.config();
+// dotenv.config();
 
 export const PORT: number = Number(process.env.PORT || 5000);
 export const SECRET: string = String(process.env.SECRET);
