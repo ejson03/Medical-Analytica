@@ -23,7 +23,12 @@ For deploying
 npm run tag
 ```
 
-To build 
+# To build 
+
+Make virtual env
+```
+python3 -m venv rasa
+```
 
 Using eveything in Docker 
 ```
