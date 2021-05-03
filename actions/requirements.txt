@@ -9,5 +9,6 @@ numpy
 pillow
 bcrypt
 dateparser
-
+py2neo
+neo4j
 
