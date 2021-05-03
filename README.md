@@ -30,20 +30,29 @@ Make virtual env
 python3 -m venv rasa
 ```
 
+
 Using eveything in Docker 
 ```
 ./scripts/build_docker.bat
 ```
+
+or 
+
 
 Running rasa and node in local 
 ```
 ./scripts/build_local.bat
 ```
 
+# To run
+
 To just run local servers if local and start docker
 ```
 ./scripts/local.bat
 ```
+
+or 
+
 
 To just run local servers if local 
 ```
