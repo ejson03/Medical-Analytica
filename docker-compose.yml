@@ -82,7 +82,6 @@ services:
       bigchaindb:
       neo4j:
         condition: service_healthy
-
     environment:
       VAULT_LOCAL_CONFIG: '{"backend" : {"file" : {"path" : "/vault/file"}}}'
     volumes:
@@ -154,6 +153,16 @@ services:
       - vault
       - server
  
+  build_medicalgraph:
+    env_file:
+      - .env
+      build:
+        context: ./Knowledge-Base
+        dockerfile: Dockerfile
+    depends_on: 
+      neo4j:
+        condition: service_healthy
+    
 
   # nginx:
   #   container_name: "nginx"
