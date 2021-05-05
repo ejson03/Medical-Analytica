@@ -133,8 +133,8 @@ services:
       target: action
     ports:
       - "5055:5055"
-    volumes:
-      - ./actions:/app
+#    volumes:
+#      - ./actions:/app
  
 
   main:
