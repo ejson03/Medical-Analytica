@@ -100,13 +100,13 @@ services:
     environment:
         - NEO4J_AUTH=none
     volumes:
-      - ./neo4j/data:/data 
-      - ./neo4j/logs:/logs 
-      - ./neo4j/import:/var/lib/neo4j/import 
-      - ./neo4j/plugins:/plugins 
+      - neo4j_data:/data 
+      - neo4j_logs:/logs 
+      - neo4j_import:/var/lib/neo4j/import 
+      - neo4j_plugins:/plugins 
     healthcheck:
         test: perl -MIO::Socket::INET -e 'exit(! defined( IO::Socket::INET->new("localhost:7687")))'
-  
+
   server:
     container_name: rasa-server
     env_file:
@@ -181,3 +181,7 @@ services:
 
 volumes:
   tm_data: {}
+  neo4j_data: {}
+  neo4j_logs: {}
+  neo4j_import: {}
+  neo4j_plugins: {}
