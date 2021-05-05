@@ -54,7 +54,7 @@ services:
       interval: 3s
       timeout: 5s
       retries: 3
-    command: ".ci/entrypoint.sh"
+    command: "bash .ci/entrypoint.sh"
     restart: always
     
   tendermint:
@@ -70,7 +70,7 @@ services:
     restart: always
 
   vault:
-    container_name: vault
+    # container_name: vault
     image: "vault"
     env_file:
       - .env
@@ -78,17 +78,18 @@ services:
       - 8200:8200
     cap_add:
       - "IPC_LOCK"
-    depends_on: 
-      bigchaindb:
-        condition: service_healthy
-      neo4j:
-        condition: service_healthy
     environment:
       VAULT_LOCAL_CONFIG: '{"backend" : {"file" : {"path" : "/vault/file"}}}'
     volumes:
-      - ./vault/config:/vault/config
-      - ./vault/policies:/vault/policies
-      - ./vault/data:/vault/data
+      - vault_config:/vault/config
+      - vault_policies:/vault/policies
+      - vault_data:/vault/data
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    restart: always
 
   neo4j:
     image: neo4j
@@ -102,10 +103,14 @@ services:
     volumes:
       - neo4j_data:/data 
       - neo4j_logs:/logs 
-      - neo4j_import:/var/lib/neo4j/import 
+      - neo4j_import:/var/lib
       - neo4j_plugins:/plugins 
     healthcheck:
-        test: perl -MIO::Socket::INET -e 'exit(! defined( IO::Socket::INET->new("localhost:7687")))'
+      test: wget http://neo4j:7474/browser -O -
+      interval: 1s
+      timeout: 1s
+      retries: 25 
+    restart: always
 
   server:
     container_name: rasa-server
@@ -121,6 +126,7 @@ services:
       - 5005:5005
     depends_on:
       - action
+    restart: always
 
       
   action:
@@ -133,26 +139,23 @@ services:
       target: action
     ports:
       - "5055:5055"
-#    volumes:
-#      - ./actions:/app
+    restart: always
  
-
   main:
-    container_name: main
+    # container_name: main
     env_file:
       - .env
     build:
       context: ./server
       dockerfile: Dockerfile
       target: app-backend
-    volumes:
-      - ./server:/app/server
     command: npm run deploy
     ports:
       - 5000:5000
     depends_on:
       - vault
       - server
+    # restart: always
  
   build_medicalgraph:
     env_file:
@@ -165,7 +168,7 @@ services:
     depends_on: 
       neo4j:
         condition: service_healthy
-    
+    restart: always
 
   # nginx:
   #   container_name: "nginx"
@@ -177,11 +180,12 @@ services:
   #   depends_on:
   #     - server
 
- 
-
 volumes:
   tm_data: {}
   neo4j_data: {}
   neo4j_logs: {}
   neo4j_import: {}
   neo4j_plugins: {}
+  vault_config: {}
+  vault_policies: {}
+  vault_data: {}

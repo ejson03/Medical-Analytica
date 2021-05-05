@@ -11,7 +11,7 @@ class MedicalGraph:
 
         self.g = Graph(
             host=os.getenv("NEO4J_URL") or "localhost",  
-            http_port=int(os.getenv("NEO4J_PORT") or 7474),  
+            port=int(os.getenv("NEO4J_PORT") or 7687),  
             user=os.getenv("NEO4J_USER") or None,  
             password=os.getenv("NEO4J_PASSWORD") or None)
 
