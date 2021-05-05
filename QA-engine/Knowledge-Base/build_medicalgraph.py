@@ -11,9 +11,9 @@ class MedicalGraph:
 
         self.g = Graph(
             host=os.getenv("NEO4J_URL") or "localhost",  
-            http_port=7474,  
-            user="neo4j",  
-            password="password")
+            http_port=int(os.getenv("NEO4J_PORT") or 7474),  
+            user=os.getenv("NEO4J_USER") or None,  
+            password=os.getenv("NEO4J_PASSWORD") or None)
 
     def read_nodes(self):
         departments = [] 
