@@ -159,7 +159,9 @@ services:
       build:
         context: ./Knowledge-Base
         dockerfile: Dockerfile
-    depends_on: 
+      environment:
+        NEO4J_URL: "neo4j"
+        depends_on: 
       neo4j:
         condition: service_healthy
     
