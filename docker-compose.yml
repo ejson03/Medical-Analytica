@@ -80,6 +80,7 @@ services:
       - "IPC_LOCK"
     depends_on: 
       bigchaindb:
+        condition: service_healthy
       neo4j:
         condition: service_healthy
     environment:
@@ -156,12 +157,12 @@ services:
   build_medicalgraph:
     env_file:
       - .env
-      build:
-        context: ./Knowledge-Base
-        dockerfile: Dockerfile
-      environment:
-        NEO4J_URL: "neo4j"
-        depends_on: 
+    build:
+      context: ./Knowledge-Base
+      dockerfile: Dockerfile
+    environment:
+      NEO4J_URL: "neo4j"
+    depends_on: 
       neo4j:
         condition: service_healthy
     
