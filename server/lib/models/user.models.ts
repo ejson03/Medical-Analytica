@@ -12,6 +12,8 @@ export interface UserInterface {
    RSAKey?: string;
    bigchainKey?: string;
    date?: string;
+   bigchainPrivateKey?: string;
+   bigchainPublicKey?: string;
 }
 
 interface SecretInterface {

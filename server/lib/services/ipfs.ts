@@ -11,7 +11,7 @@ export const Download = (res: any, buffer: any) => {
       stream.push(null);
       return stream;
    }
-   return new Promise((resolve, reject) => {
+   return new Promise<void>((resolve, reject) => {
       return BufferToStream(buffer)
          .pipe(res)
          .on('error', (error: any) => {

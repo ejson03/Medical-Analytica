@@ -77,14 +77,14 @@ export const view = async (req: Request, res: Response) => {
       let fileURL = String(req.body.fileURL);
       let decryptedBuffer;
       if (status === 'encrypted') {
-         fileURL = cryptoService.decrypt(fileURL, req.session?.user.secrets.secretKey);
+         fileURL = cryptoService.decrypt(fileURL, req.session?.user?.secrets?.secretKey);
       }
       console.log(fileURL);
       const buffer = await ipfsService.GetFile(fileURL);
       if (req.body.hasOwnProperty('key')) {
          decryptedBuffer = cryptoService.decryptFile(buffer, req.body.key);
       } else {
-         decryptedBuffer = cryptoService.decryptFile(buffer, req.session?.user.secrets.secretKey);
+         decryptedBuffer = cryptoService.decryptFile(buffer, req.session?.user?.secrets.secretKey!);
       }
       await ipfsService.Download(res, decryptedBuffer);
       return fileURL;
@@ -96,11 +96,11 @@ export const view = async (req: Request, res: Response) => {
 
 export const rasa = async (req: Request, res: Response) => {
    try {
-      const sender = String(req.session?.user.user.username) || 'vortex';
+      const sender = String(req.session?.user?.user.username) || 'vortex';
       let message: any;
       let rasa: any;
       if (req.file) {
-         message = await createIPFSHashFromFileBuffer(req.file.buffer, req.session?.user.secrets.secretKey);
+         message = await createIPFSHashFromFileBuffer(req.file.buffer, req.session?.user?.secrets.secretKey!);
          rasa = await rasaService.RASARequest(message, sender, req.session?.client_token);
       } else {
          message = req.body.message;
@@ -120,12 +120,12 @@ export const rasaHistory = async (req: Request, res: Response) => {
       if (data.length != 0) {
          return res.render('doctor/history.ejs', {
             doc: data,
-            name: req.session?.user.user.name
+            name: req.session?.user?.user.name
          });
       } else {
          return res.render('doctor/history.ejs', {
             doc: [],
-            name: req.session?.user.user.name
+            name: req.session?.user?.user.name
          });
       }
    } catch (err) {
