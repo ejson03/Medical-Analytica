@@ -4,8 +4,8 @@ from typing import List, Iterable, Iterator
 
 
 class Tracker4J:
-    def __init__(self, profile=None, **args):
-        self.graph = Graph(profile, **args)
+    def __init__(self, **args):
+        self.graph = Graph(**args)
 
     def _get_newest_event_by_timestamp(self, events: Iterable, name: str):
         return next(event for event in reversed(events) if event["event"] == name)

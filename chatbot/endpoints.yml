@@ -7,7 +7,7 @@ tracker_store:
   type: custom.custom_tracker.GridTrackerStore
   url: ${MONGO_URL}
   db: rasa
-  neo4j_url: ${NEO4J_URL}
+  neo4j_host: ${NEO4J_URL}
 
  
  
