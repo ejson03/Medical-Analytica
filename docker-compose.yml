@@ -79,8 +79,10 @@ services:
     cap_add:
       - "IPC_LOCK"
     depends_on: 
-      - bigchaindb
-      - neo4j
+      bigchaindb:
+      neo4j:
+        condition: service_healthy
+
     environment:
       VAULT_LOCAL_CONFIG: '{"backend" : {"file" : {"path" : "/vault/file"}}}'
     volumes:
@@ -102,7 +104,9 @@ services:
       - ./neo4j/logs:/logs 
       - ./neo4j/import:/var/lib/neo4j/import 
       - ./neo4j/plugins:/plugins 
-
+    healthcheck:
+        test: perl -MIO::Socket::INET -e 'exit(! defined( IO::Socket::INET->new("localhost:7687")))'
+  
   server:
     container_name: rasa-server
     env_file:
