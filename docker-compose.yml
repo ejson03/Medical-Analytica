@@ -158,7 +158,7 @@ services:
     env_file:
       - .env
     build:
-      context: ./Knowledge-Base
+      context: ./QA-engine/Knowledge-Base
       dockerfile: Dockerfile
     environment:
       NEO4J_URL: "neo4j"
