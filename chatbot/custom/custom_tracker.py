@@ -15,7 +15,7 @@ from datetime import datetime
 from termcolor import colored
 import inspect
 import os
-from . import Tracker4J
+import Tracker4J
 from dotenv import load_dotenv
 
 load_dotenv()
