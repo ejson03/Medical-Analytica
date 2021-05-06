@@ -4,10 +4,10 @@ action_endpoint:
 
 
 tracker_store:
-  type: mongod
+  type: custom.custom_tracker.GridTrackerStore
   url: ${MONGO_URL}
   db: rasa
-  # neo4j_host: ${NEO4J_URL}
+  neo4j_host: ${NEO4J_URL}
  
  # custom rasa tracker to tackle bson 16mb document limit
 #  tracker_store:

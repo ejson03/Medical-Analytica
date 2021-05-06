@@ -134,7 +134,6 @@ services:
       - action
     # restart: always
 
-      
   action:
     container_name: rasa-action-server
     env_file:
@@ -165,7 +164,6 @@ services:
       - vault
       - server
     restart: always
-
  
   build_medicalgraph:
     env_file:
@@ -179,7 +177,6 @@ services:
       neo4j:
         condition: service_healthy
     restart: always
-
 
   # nginx:
   #   container_name: "nginx"
