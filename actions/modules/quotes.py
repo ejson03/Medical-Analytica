@@ -42,7 +42,6 @@ def wrap_text(text, w=30):
     new_text += "\n" + new_sentence
     return new_text
 
-
 def write_image(text):
     text = wrap_text(text)
     font_size = recommend_font_size(text)

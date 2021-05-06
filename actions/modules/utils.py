@@ -5,10 +5,9 @@ import random
 import urllib.request
 import urllib.parse
 import re
-from .quotes import get_base64
+from actions.modules.quotes import get_base64
 
-
-path = "assets/json"
+path = "./actions/assets/json/"
 
 def get_url(query):
     query_string = urllib.parse.urlencode({"search_query" : query})
@@ -16,7 +15,6 @@ def get_url(query):
     search_results = re.findall(r'url\":\"\/watch\?v=(.{11})', html_content.read().decode())
     url = f"https://www.youtube.com/embed/{search_results[0]}?autoplay=1"
     return url
-
 
 def get_music(emotion):
     with open(os.path.join(path, 'music.json'), 'r') as f:

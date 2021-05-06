@@ -9,6 +9,12 @@ services:
     ports:
       - "27017:27017"
     command: mongod
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongodb:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
     restart: always
 
   bigchaindb:
@@ -70,7 +76,7 @@ services:
     restart: always
 
   vault:
-    # container_name: vault
+    container_name: vault
     image: "vault"
     env_file:
       - .env
@@ -120,13 +126,13 @@ services:
       context: .
       dockerfile: Dockerfile
       target: chatbot
-    volumes:
-      - ./chatbot:/app
+    # volumes:
+    #   - ./chatbot:/app
     ports:
       - 5005:5005
     depends_on:
       - action
-    restart: always
+    # restart: always
 
       
   action:
@@ -139,10 +145,13 @@ services:
       target: action
     ports:
       - "5055:5055"
-    restart: always
+    depends_on: 
+      - neo4j
+      - mongodb
+    # restart: always
  
   main:
-    # container_name: main
+    container_name: main
     env_file:
       - .env
     build:
@@ -155,7 +164,8 @@ services:
     depends_on:
       - vault
       - server
-    # restart: always
+    restart: always
+
  
   build_medicalgraph:
     env_file:
@@ -169,6 +179,7 @@ services:
       neo4j:
         condition: service_healthy
     restart: always
+
 
   # nginx:
   #   container_name: "nginx"

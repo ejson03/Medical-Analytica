@@ -1,7 +1,6 @@
 from pymongo import MongoClient
-from modules.utils import *
-from modules.diagnose import encode_symptom, create_illness_vector, get_diagnosis
-from modules.config import * 
+from actions.modules.utils import *
+from actions.modules.diagnose import encode_symptom, create_illness_vector, get_diagnosis
 import dateparser as ddp
 import os, requests, base64, uuid
 from os import environ
@@ -13,18 +12,24 @@ from rasa_sdk.forms import FormAction
 from rasa_sdk.executor import CollectingDispatcher
 from typing import Text, Callable, Dict, List, Any, Optional
 from py2neo import Graph,Node,Relationship
+from dotenv import load_dotenv
 import pandas as pd
 
-client = MongoClient(MONGODB_STRING)
-disease_file = './assets/disease.txt'
+load_dotenv()
+
+WEATHER_KEY= os.environ.get("WEATHER_KEY")
+WEATHER_ID= os.environ.get("WEATHER_ID")
+
+client = MongoClient(os.getenv("MONGO_URL"))
+disease_file = './actions/assets/disease.txt'
 disease_names = [i.strip() for i in open(disease_file, 'r', encoding='UTF-8').readlines()]
 
 try:
     graph = Graph(
-            host=NEO4J_STRING,
-            http_port=7474,
-            user=NEO4J_USERNAME,
-            password= NEO4J_PASSWORD)
+            host = os.getenv("NEO4J_URL") or "localhost",  
+            port = int(os.getenv("NEO4J_PORT") or 7687),  
+            user = os.getenv("NEO4J_USER") or None,  
+            password = os.getenv("NEO4J_PASSWORD") or None)
 except Exception as e:
     import sys
     sys.exit(-1)
@@ -104,7 +109,7 @@ class ActionGetSong(Action):
             dispatcher.utter_message("Here is something for your mood.")
             dispatcher.utter_message(json_message={"payload":"video","data":url})
         else:
-            dispatcher.utter_message("I couldn't contemplate what you are going thorugh. I'm sorry.")
+            dispatcher.utter_message("I couldn't contemplate what you are going thorough. I'm sorry.")
 
 class ActionGetQuote(Action):
     def name(self):
@@ -133,7 +138,7 @@ class ActionDateRecord(Action):
             dispatcher.utter_message(json_message={"payload":"listdocuments","data":response})
             dispatcher.utter_message("Got the date")
         else:
-            dispatcher.utter_message("I couldn't contemplate what you are going thorugh. I'm sorry.")
+            dispatcher.utter_message("I couldn't contemplate what you are going thorough. I'm sorry.")
 
 class ActionTransferRecord(Action):
     def name(self):
@@ -154,7 +159,7 @@ class ActionTransferRecord(Action):
             response = res.json()
             dispatcher.utter_message("Your {} is been tranfered to {} doctor".format(records,doctor))
         else:
-            dispatcher.utter_message("I couldn't contemplate what you are going thorugh. I'm sorry.")
+            dispatcher.utter_message("I couldn't contemplate what you are going thorough. I'm sorry.")
         
 class ActionFilterRecord(Action):
     def name(self):
@@ -202,7 +207,7 @@ class ActionFilterRecord(Action):
             dispatcher.utter_message(json_message={"payload":"listrecords","head":header,"data":response})
             dispatcher.utter_message("Got the query and doctor")
         else:
-            dispatcher.utter_message("I couldn't contemplate what you are going thorugh. I'm sorry.")
+            dispatcher.utter_message("I couldn't contemplate what you are going thorough. I'm sorry.")
 
 
 class ActionGetJoke(Action):

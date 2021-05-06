@@ -16,6 +16,9 @@ from termcolor import colored
 import inspect
 import os
 from . import Tracker4J
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class GridTrackerStore(TrackerStore):
@@ -29,7 +32,7 @@ class GridTrackerStore(TrackerStore):
         auth_source="admin",
         collection="conversations",
         neo4j_host=os.getenv("NEO4J_URL") or "localhost",  
-        neo4j_http_port=int(os.getenv("NEO4J_PORT") or 7474),  
+        neo4j_http_port=int(os.getenv("NEO4J_PORT") or 7687),  
         neo4j_user=os.getenv("NEO4J_USER") or None,  
         neo4j_password=os.getenv("NEO4J_PASSWORD") or None,
         event_broker=None,
@@ -47,7 +50,7 @@ class GridTrackerStore(TrackerStore):
 
         try:
             self.Tracker4J = Tracker4J.Tracker4J(host=neo4j_host,  
-            http_port=neo4j_http_port,  
+            port=neo4j_http_port,  
             user=neo4j_user,  
             password=neo4j_password)
         except:
