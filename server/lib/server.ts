@@ -3,6 +3,7 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cors from 'cors';
 import router from './routes';
+import flash from 'connect-flash';
 
 import { Vault } from './services/vault';
 
@@ -22,6 +23,7 @@ async function App() {
    app.use(express.json());
    app.use(express.urlencoded({ extended: true }));
    app.use(cors());
+   app.use(flash());
 
    await Mongo.Connect();
 
