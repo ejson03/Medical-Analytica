@@ -9,22 +9,24 @@ import * as config from './config';
 import PassportModelsGenerate from './services/Passport';
 import passport from 'passport';
 
+import * as Mongo from './services/mongo';
+
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-const MongoStoreSession = MongoStore(session);
+   await Mongo.Connect();
 
+   if (Mongo.client != null)
 app.use(
    session({
-      store: new MongoStoreSession({
-         url: config.MONGO_URL
-      }),
+            store: MongoStore.create({ client: Mongo.client, dbName: 'session-db' }),
+
       secret: config.SECRET,
-      resave: false,
-      saveUninitialized: false,
+            resave: true,
+            saveUninitialized: true,
       cookie: {
          maxAge: 1000 * 60 * 60 * 24
       }
