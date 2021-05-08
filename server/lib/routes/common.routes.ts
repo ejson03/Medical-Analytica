@@ -15,7 +15,7 @@ commonRouter.get('/login', function (_req: Request, res: Response) {
    return res.render('login.html');
 });
 commonRouter.get('/signup', function (_req: Request, res: Response) {
-   return res.render('signup.html');
+   return res.render('signup.ejs', { body: {}, error: null });
 });
 
 commonRouter.get('/chatbot', IsAuthenticated, (_req, res) => {
