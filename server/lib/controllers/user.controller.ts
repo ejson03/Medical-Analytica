@@ -12,9 +12,8 @@ import type { Request, Response } from 'express';
 
 export const getDoctorList = async (req: Request, res: Response) => {
    try {
-      let result = await bigchainService.getAsset('Doctor');
-      result = result.map((data: { [x: string]: unknown }) => data['data']);
-      return res.render('patient/doclist.ejs', { doctors: result, name: req.session?.user?.user.name });
+      const doctors = (await bigchainService.getAsset('Doctor')).map(({ data }) => data);
+      return res.render('patient/doclist.ejs', { doctors: doctors, name: req.user?.user.name });
    } catch (err) {
       console.error(err);
       return res.sendStatus(404);
@@ -23,9 +22,9 @@ export const getDoctorList = async (req: Request, res: Response) => {
 
 export const getMedicalHistory = async (req: Request, res: Response) => {
    try {
-      if (req.session) {
-         const records = await req.session.user.getRecords(req.session.user?.user.username!);
-         return res.render('patient/history.ejs', { records: records, name: req.session.user?.user.name });
+      if (req.user) {
+         const records = await req.user?.getRecords(req.user.user.username!);
+         return res.render('patient/history.ejs', { records: records, name: req.user.user.name });
       }
    } catch (err) {
       console.error(err);
@@ -36,7 +35,7 @@ export const getMedicalHistory = async (req: Request, res: Response) => {
 export const postAccess = async (req: Request, res: Response) => {
    const doctor: string = req.body.value as string;
    try {
-      const data = await showAccess(doctor, req.session?.user?.records);
+      const data = await showAccess(doctor, req.user?.records);
       return res.json({ records: data });
    } catch (err) {
       console.error(err);
@@ -47,7 +46,7 @@ export const postAccess = async (req: Request, res: Response) => {
 export const postRevoke = async (req: Request, res: Response) => {
    const doctor: string = req.body.value as string;
    try {
-      const data = await showRevoke(doctor, req.session?.user?.records);
+      const data = await showRevoke(doctor, req.user?.records);
       return res.json({ records: data });
    } catch (err) {
       console.error(err);
@@ -65,10 +64,10 @@ export const check = async (req: Request, res: Response) => {
    try {
       await createAccess(
          data,
-         req.session?.user?.secrets.bigchainPublicKey!,
-         req.session?.user?.secrets.bigchainPrivateKey!,
+         req.user?.secrets.bigchainPublicKey!,
+         req.user?.secrets.bigchainPrivateKey!,
          doctor,
-         req.session?.user?.secrets.secretKey!
+         req.user?.secrets.secretKey!
       );
       return res.redirect('/user/home');
    } catch (err) {
@@ -85,12 +84,7 @@ export const uncheck = async (req: Request, res: Response) => {
       if (req.body[key] != null) data.push(req.body[key]);
    }
    try {
-      await revokeAccess(
-         data,
-         req.session?.user?.secrets.bigchainPublicKey!,
-         req.session?.user?.secrets.bigchainPrivateKey!,
-         doctor
-      );
+      await revokeAccess(data, req.user?.secrets.bigchainPublicKey!, req.user?.secrets.bigchainPrivateKey!, doctor);
       return res.redirect('/user/home');
    } catch (err) {
       console.error(err);
@@ -102,7 +96,7 @@ export const prescription = async (req: Request, res: Response) => {
    const demail = req.body.value;
    console.log(demail);
    try {
-      const data = await getPrescription(req.session?.user?.user.username!, demail, req.session?.user?.secrets.secretKey!);
+      const data = await getPrescription(req.user?.user.username!, demail, req.user?.secrets.secretKey!);
       console.log(data);
       return res.json({ records: data });
    } catch (err) {
@@ -115,7 +109,7 @@ export const assetHistory = async (req: Request, res: Response) => {
    let assetid = req.body.history;
    try {
       let data = await getAssetHistory(assetid);
-      return res.render('patient/asset.ejs', { records: data, name: req.session?.user?.user.name });
+      return res.render('patient/asset.ejs', { records: data, name: req.user?.user.name });
    } catch (err) {
       console.error(err);
       return res.sendStatus(404);
@@ -142,12 +136,12 @@ export const addRecord = async (req: Request, res: Response) => {
    try {
       await createRecord(
          data,
-         req.session?.user?.user.username!,
+         req.user?.user.username!,
          fileBuffer,
-         req.session?.user?.secrets.bigchainPublicKey!,
-         req.session?.user?.secrets.bigchainPrivateKey!,
-         req.session?.user?.secrets.secretKey!,
-         req.session?.user?.user.email!
+         req.user?.secrets.bigchainPublicKey!,
+         req.user?.secrets.bigchainPrivateKey!,
+         req.user?.secrets.secretKey!,
+         req.user?.user.email!
       );
       return res.redirect('/user/medicalhistory');
    } catch (err) {

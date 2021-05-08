@@ -2,7 +2,8 @@ import { Router } from 'express';
 import type { Request, Response } from 'express';
 import { commonController } from '../controllers';
 import fileUpload from '../middleware/file-upload';
-import { SessionDestroy } from '../utils';
+import { IsAuthenticated } from '../utils/AuthCheck';
+import passport from 'passport';
 
 const commonRouter: Router = Router();
 
@@ -17,23 +18,33 @@ commonRouter.get('/signup', function (_req: Request, res: Response) {
    return res.render('signup.html');
 });
 
-commonRouter.get('/chatbot', (_req, res) => {
+commonRouter.get('/chatbot', IsAuthenticated, (_req, res) => {
    res.render('chatbot.ejs');
 });
 
 commonRouter.post('/signup', commonController.signUp);
-commonRouter.post('/login', commonController.login);
+commonRouter.post('/login', passport.authenticate('app', { failureRedirect: '/login', successRedirect: '/home' }));
 
-commonRouter.post('/getrasahistory', commonController.rasaHistory);
+commonRouter.get('/home', IsAuthenticated, (req, res) => {
+   if (req.user?.schema == 'Patient') {
+      return res.redirect('/user/home');
+   }
+   if (req.user?.schema == 'Doctor') {
+      return res.redirect('/doctor/home');
+   }
+   return res.redirect('/login');
+});
 
-commonRouter.post('/view', commonController.view);
+commonRouter.post('/getrasahistory', IsAuthenticated, commonController.rasaHistory);
 
-commonRouter.post('/rasa', fileUpload.single('file'), commonController.rasa);
-commonRouter.post('/charts', commonController.rasaCharts);
+commonRouter.post('/view', IsAuthenticated, commonController.view);
 
-commonRouter.post('/logout', async function (req: Request, res: Response) {
-   await SessionDestroy(req);
-   res.render('index.html');
+commonRouter.post('/rasa', IsAuthenticated, fileUpload.single('file'), commonController.rasa);
+commonRouter.post('/charts', IsAuthenticated, commonController.rasaCharts);
+
+commonRouter.all('/logout', IsAuthenticated, (req: Request, res: Response) => {
+   req.logout();
+   return res.redirect('/');
 });
 
 export default commonRouter;

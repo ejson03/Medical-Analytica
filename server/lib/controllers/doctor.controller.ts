@@ -4,10 +4,10 @@ import { Request, Response } from 'express';
 
 export const getFiles = async (req: Request, res: Response) => {
    try {
-      let data = await getDoctorFiles(req.session?.user?.user.username!, req.session?.user?.secrets.RSAPrivateKey);
+      let data = await getDoctorFiles(req.user?.user.username!, req.user?.secrets.RSAPrivateKey);
       return res.render('doctor/assets.ejs', {
          records: data,
-         name: req.session?.user?.user.name
+         name: req.user?.user.name
       });
    } catch (err) {
       console.error(err);
@@ -17,7 +17,7 @@ export const getFiles = async (req: Request, res: Response) => {
 
 export const getDetails = async (req: Request, res: Response) => {
    try {
-      return res.render('doctor/profile.ejs', { record: req.session?.user?.user, name: req.session?.user?.user.name });
+      return res.render('doctor/profile.ejs', { record: req.user?.user, name: req.user?.user.name });
    } catch (err) {
       console.error(err);
       return res.sendStatus(404);
@@ -28,7 +28,7 @@ export const getPrescription = async (req: Request, res: Response) => {
    const files = req.body.value;
    res.render('doctor/prescribe.ejs', {
       records: JSON.parse(files),
-      name: req.session?.user?.user.name
+      name: req.user?.user.name
    });
 };
 
@@ -36,7 +36,7 @@ export const postPrescription = async (req: Request, res: Response) => {
    const { id, description, pkey, prescription } = req.body;
    const code = cryptoService.generateCode();
    let data = {
-      username: req.session?.user?.user.username!,
+      username: req.user?.user.username!,
       assetID: id,
       description: description,
       prescription: prescription,
@@ -44,12 +44,12 @@ export const postPrescription = async (req: Request, res: Response) => {
       schema: 'record'
    };
    let metadata = {
-      email: req.session?.user?.user.email!,
+      email: req.user?.user.email!,
       datetime: new Date().toString(),
       id: code
    };
    try {
-      await bigchainService.createAsset(data, metadata, pkey, req.session?.user?.secrets.bigchainPrivateKey!);
+      await bigchainService.createAsset(data, metadata, pkey, req.user?.secrets.bigchainPrivateKey!);
       return res.redirect('/doctor/home');
    } catch (err) {
       console.error(err);
