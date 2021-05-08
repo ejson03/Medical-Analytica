@@ -63,7 +63,6 @@ export interface MetadataInterface {
 }
 
 export default class UserModel {
-   public registered: boolean = false;
    public records: [] = [];
    public user = {} as UserInterface;
    public secrets = {} as SecretInterface;
@@ -73,26 +72,18 @@ export default class UserModel {
       if (user) {
          this.secrets = user.secrets;
          this.user = user.user;
-         this.registered = user.registered;
          this.records = user.records;
       }
    }
 
    async getBio(username: string, schema: string) {
-      try {
          const records = await bigchainService.getAsset(username);
          const filteredRecords = records.filter(record => record.data.schema == schema);
-         this.registered = true;
          this.user = filteredRecords[0]['data'];
          await this.readKeys();
-      } catch (error) {
-         console.error(error);
-         this.registered = false;
-      }
    }
 
-   async writeKeys(username: string) {
-      try {
+   private async writeKeys(username: string) {
          const clientVault = await vaultService.vaultFromToken(this.clientToken);
          this.secrets!.secretKey = cryptoService.createSecretKey();
          const bigchainKeys = bigchainService.createBigchainKeys(
@@ -106,12 +97,9 @@ export default class UserModel {
          for (const secret in this.secrets) {
             vaultService.write(clientVault, secret, this.secrets[secret]);
          }
-      } catch (error) {
-         console.error(error);
-      }
    }
 
-   async readKeys() {
+   private async readKeys() {
       const clientVault = await vaultService.vaultFromToken(this.clientToken);
       this.secrets.bigchainPrivateKey = await vaultService.read(clientVault, 'bigchainPrivateKey');
       this.secrets.bigchainPublicKey = await vaultService.read(clientVault, 'bigchainPublicKey');
@@ -121,7 +109,6 @@ export default class UserModel {
    }
 
    async createUser(asset: UserInterface, password: string) {
-      try {
          const vault = vaultService.Vault;
          await vaultService.signUp(vault, password, asset.username)
          const status = await vaultService.login(vault, password, asset.username);
@@ -140,13 +127,8 @@ export default class UserModel {
             this.secrets.bigchainPublicKey,
             this.secrets.bigchainPrivateKey
          );
-         this.registered = true;
          this.user = tx.asset.data;
          return tx.asset.data;
-      } catch (error) {
-         console.error('Error is', error);
-         return false;
-      }
    }
 
    async getRecords(username: string) {
@@ -161,6 +143,5 @@ export default class UserModel {
          console.error(err);
          return [];
       }
-      return [];
    }
 }
