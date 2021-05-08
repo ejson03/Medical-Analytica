@@ -60,7 +60,7 @@ services:
       interval: 3s
       timeout: 5s
       retries: 3
-    command: "bash .ci/entrypoint.sh"
+    command: ".ci/entrypoint.sh"
     restart: always
     
   tendermint:
@@ -84,35 +84,45 @@ services:
       - 8200:8200
     cap_add:
       - "IPC_LOCK"
+    depends_on: 
+      bigchaindb:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
     environment:
       VAULT_LOCAL_CONFIG: '{"backend" : {"file" : {"path" : "/vault/file"}}}'
+      VAULT_API_ADDR: http://127.0.0.1:8200
+    volumes:
+      - vault_config:/vault/config
+      - vault_policies:/vault/policies
+      - vault_data:/vault/data
     healthcheck:
-        test: ["CMD", "vault", "status"]
-        interval: 2s
-        timeout: 3s
-        retries: 30
-
-  # neo4j:
-  #   image: neo4j
-  #   container_name: neo4j
-  #   ports: 
-  #       - "7474:7474"
-  #       - "7373:7373"
-  #       - "7687:7687"
-  #   environment:
-  #       - NEO4J_AUTH=none
-  #   volumes:
-  #     - neo4j_data:/data 
-  #     - neo4j_logs:/logs 
-  #     - neo4j_import:/var/lib
-  #     - neo4j_plugins:/plugins 
-  #   healthcheck:
-  #     test: wget http://neo4j:7474/browser -O -
-  #     interval: 1s
-  #     timeout: 1s
-  #     retries: 25 
-  #   restart: always
-
+      test: ["CMD", "vault", "status"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+   
+  neo4j:
+    image: neo4j
+    container_name: neo4j
+    ports: 
+        - "7474:7474"
+        - "7373:7373"
+        - "7687:7687"
+    environment:
+        - NEO4J_AUTH=none
+    volumes:
+      - neo4j_data:/data 
+      - neo4j_logs:/logs 
+      - neo4j_import:/var/lib
+      - neo4j_plugins:/plugins 
+    healthcheck:
+      test: wget http://neo4j:7474/browser -O -
+      interval: 1s
+      timeout: 1s
+      retries: 25 
+    restart: always
+  
   # server:
   #   container_name: rasa-server
   #   env_file:
@@ -121,14 +131,14 @@ services:
   #     context: .
   #     dockerfile: Dockerfile
   #     target: chatbot
-  #   # volumes:
-  #   #   - ./chatbot:/app
+  #   volumes:
+  #     - ./chatbot:/app
   #   ports:
   #     - 5005:5005
   #   depends_on:
   #     - action
-  #   # restart: always
 
+      
   # action:
   #   container_name: rasa-action-server
   #   env_file:
@@ -139,11 +149,10 @@ services:
   #     target: action
   #   ports:
   #     - "5055:5055"
-  #   depends_on: 
-  #     - neo4j
-  #     - mongodb
-  #   # restart: always
+  #   volumes:
+  #     - ./actions:/app
  
+
   # main:
   #   container_name: main
   #   env_file:
@@ -152,26 +161,15 @@ services:
   #     context: ./server
   #     dockerfile: Dockerfile
   #     target: app-backend
+  #   volumes:
+  #     - ./server:/app/server
   #   command: npm run deploy
   #   ports:
   #     - 5000:5000
   #   depends_on:
   #     - vault
-  #     - mongodb
-  #   restart: always
+  #     - server
  
-  # build_medicalgraph:
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: ./QA-engine/Knowledge-Base
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     NEO4J_URL: "neo4j"
-  #   depends_on: 
-  #     neo4j:
-  #       condition: service_healthy
-  #   restart: always
 
   # nginx:
   #   container_name: "nginx"
@@ -183,9 +181,14 @@ services:
   #   depends_on:
   #     - server
 
+ 
+
 volumes:
   tm_data: {}
   neo4j_data: {}
   neo4j_logs: {}
   neo4j_import: {}
   neo4j_plugins: {}
+  vault_config: {}
+  vault_policies: {}
+  vault_data: {}
