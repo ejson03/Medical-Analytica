@@ -1,4 +1,3 @@
-import { Endpoints, EndpointsResponse } from 'bigchaindb-driver/types/connection';
 import { cryptoService, bigchainService, vaultService } from '../services';
 
 export interface UserInterface {
@@ -76,7 +75,7 @@ export default class UserModel {
       }
    }
 
-   async getBio(username: string, schema: string) {
+   public async getBio(username: string, schema: string) {
       const records = await bigchainService.getAsset(username);
       const filteredRecords = records.filter(record => record.data.schema == schema);
       this.user = (filteredRecords[0].data as unknown) as UserInterface;
@@ -107,7 +106,7 @@ export default class UserModel {
       this.secrets.secretKey = await vaultService.read(clientVault, 'secretKey');
    }
 
-   async createUser(asset: UserInterface, password: string) {
+   public static async createUser(asset: UserInterface, password: string) {
       const vault = vaultService.Vault;
       await vaultService.signUp(vault, password, asset.username);
       const status = await vaultService.login(vault, password, asset.username);
@@ -115,19 +114,20 @@ export default class UserModel {
          throw new Error('Unable to sign in');
       }
       const vaultClientToken = status.auth.client_token;
-      this.clientToken = vaultClientToken;
-      await this.writeKeys(asset.username);
-      asset.bigchainKey = this.secrets.bigchainPublicKey.toString();
-      asset.RSAKey = this.secrets.RSAPublicKey.toString();
+      const user = new UserModel();
+      user.clientToken = vaultClientToken;
+      await user.writeKeys(asset.username);
+      asset.bigchainKey = user.secrets.bigchainPublicKey.toString();
+      asset.RSAKey = user.secrets.RSAPublicKey.toString();
       asset.date = new Date().toString();
       let tx = await bigchainService.createAsset(
          asset,
          null,
-         this.secrets.bigchainPublicKey,
-         this.secrets.bigchainPrivateKey
+         user.secrets.bigchainPublicKey,
+         user.secrets.bigchainPrivateKey
       );
-      this.user = (tx.asset.data as unknown) as UserInterface;
-      return tx.asset.data;
+      user.user = (tx.asset.data as unknown) as UserInterface;
+      return user;
    }
 
    public static async getRecords(username: string) {

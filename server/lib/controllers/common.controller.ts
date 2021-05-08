@@ -25,8 +25,7 @@ export const signUp = async (req: Request, res: Response) => {
             delete asset[key];
          });
       }
-      const user = new UserModel();
-      await user.createUser(asset, password);
+      const user = await UserModel.createUser(asset, password);
       if (user.user) return res.redirect('/login');
    } catch (error) {
       console.error(error);
