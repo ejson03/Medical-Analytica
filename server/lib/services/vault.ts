@@ -13,8 +13,6 @@ export const Vault = new VaultAccess({
    AltToken: ''
 });
 
-Vault.Setup();
-
 export const vaultFromToken = async (token: string) => {
    const clientVault = new VaultAccess({
       Authority: ['create', 'read', 'update', 'delete', 'list'],

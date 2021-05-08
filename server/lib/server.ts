@@ -5,6 +5,8 @@ import MongoStore from 'connect-mongo';
 import cors from 'cors';
 import router from './routes';
 
+import { Vault } from './services/vault';
+
 import * as config from './config';
 import PassportModelsGenerate from './services/Passport';
 import passport from 'passport';
@@ -40,6 +42,8 @@ app.use('/', router);
 app.get('/dashboard', (_req, res) => {
    res.render('dashboard.html');
 });
+
+   await Vault.Setup();
 
 app.listen(config.PORT, function () {
    console.log(`App listening on port ${config.PORT}`);
