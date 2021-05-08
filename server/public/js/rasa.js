@@ -222,7 +222,7 @@ function setBotResponse(val) {
                let outerButton = createButton('Please click here to see the quote', {
                   type: 'button',
                   class: 'btn btn-primary',
-                  style: 'border-radius: 25px;background-color: #00d0ff;color:black;box-shadow: 5px 5px #888888;',
+                  style: 'border-radius: 25px;background-color:#00fffa;font-size: initial;color:black;box-shadow: 5px 5px #888888;',
                   'data-toggle': 'modal',
                   'data-target': `#${vid}`
                });
@@ -256,7 +256,7 @@ function setBotResponse(val) {
                   let outerButton = createButton('Please click here to see the video', {
                      type: 'button',
                      class: 'btn btn-primary',
-                     style: 'border-radius: 25px;background-color: #00d0ff;color:black;box-shadow: 5px 5px #888888;',
+                     style: 'border-radius: 25px;background-color:#00fffa;font-size: intial;color:black;box-shadow: 5px 5px #888888;',
                      'data-toggle': 'modal',
                      'data-target': `#${vid}`
                   });
@@ -280,51 +280,7 @@ function setBotResponse(val) {
                   BotResponse = base;
                   $(BotResponse).appendTo('#result_div').hide().fadeIn(1000);
                }
-               if (val[i].custom.payload == 'symptom') {
-                  let base = createBaseChat();
-                  let response = createDiv((style = ['msg_cotainer1']), (id = ''), (text = ''));
-                  let timespan = createSpan((style = ['msg_time']), (text = time));
-                  console.log(val[i].custom.payload);
-                  let { main, head, body, section1, section2 } = createModalscrollable(val[i].custom.data.name, vid);
-                  let outerButton = createButton(`Click here to know more about ${val[i].custom.data.name}`, {
-                     type: 'button',
-                     class: 'btn btn-primary',
-                     style: 'border-radius: 25px;background-color: #00d0ff;color:black;box-shadow: 5px 5px #888888;',
-                     'data-toggle': 'modal',
-                     'data-target': `#${vid}`
-                  });
-                  let listElement = document.createElement('div');
-                  let symptoms = `<div class="table-responsive">
-                  <table class="table table-hover">
-                    <thead class="text-primary">
-                     <th> Description </th>
-                     <th> Cause </th>
-                     <th> Treatment </th>
-                    </thead>
-                    <tbody>
-                     <tr>
-                       <td>${val[i].custom.data.desc}</td>
-                       <td>${val[i].custom.data.causes}</td>
-                       <td>${val[i].custom.data.treatment}</td>
-                     </tr>
-                    </tbody>
-                  </table>
-                 </div>`;
-                  section1.innerHTML = symptoms;
-                  let footerdiv = document.createElement('div');
-                  setAttributes(footerdiv, { class: 'modal-footer', style: 'padding: 0rem;' });
-                  let footer = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`;
-                  footerdiv.innerHTML = footer;
-                  body.append(section2, section1);
-                  body.appendChild(footerdiv);
-                  head.appendChild(body);
-                  main.appendChild(head);
-                  response.append(outerButton, timespan, main);
-                  base.appendChild(response);
-                  BotResponse = base;
-                  $(BotResponse).appendTo('#result_div').hide().fadeIn(1000);
-               }
-
+               
                if (val[i].custom.payload == 'fileupload') {
                   let base = createBaseChat();
                   let response = createDiv((style = ['msg_cotainer1']), (id = ''), (text = ''));
@@ -333,7 +289,7 @@ function setBotResponse(val) {
                   let outerButton = createButton('Please click here to upload the file', {
                      type: 'button',
                      class: 'btn btn-primary',
-                     style: 'border-radius: 25px;background-color: #00d0ff;color:black;box-shadow: 5px 5px #888888;',
+                     style: 'border-radius: 25px;background-color:#00fffa;font-size: intial;color:black;box-shadow: 5px 5px #888888;',
                      'data-toggle': 'modal',
                      'data-target': `#${vid}`
                   });
@@ -360,6 +316,7 @@ function setBotResponse(val) {
                   BotResponse = base;
                   $(BotResponse).appendTo('#result_div').hide().fadeIn(1000);
                }
+
                if (val[i].custom.payload == 'listdocuments') {
                   let base = createBaseChat();
                   let response = createDiv((style = ['msg_cotainer1']), (id = ''), (text = ''));
@@ -368,7 +325,7 @@ function setBotResponse(val) {
                   let outerButton = createButton('Please click here to see the list of documents', {
                      type: 'button',
                      class: 'btn btn-primary',
-                     style: 'border-radius: 25px;background-color: #00d0ff;color:black;box-shadow: 5px 5px #888888;',
+                     style: 'border-radius: 25px;background-color:#00fffa;font-size: intial;color:black;box-shadow: 5px 5px #888888;',
                      'data-toggle': 'modal',
                      'data-target': `#${vid}`
                   });
@@ -420,6 +377,7 @@ function setBotResponse(val) {
                   BotResponse = base;
                   $(BotResponse).appendTo('#result_div').hide().fadeIn(1000);
                }
+
                if (val[i].custom.payload == 'listrecords') {
                   let base = createBaseChat();
                   let recordname = val[i].custom.head;
@@ -429,7 +387,7 @@ function setBotResponse(val) {
                   let outerButton = createButton('Please click here to see the list of your medical record(s)', {
                      type: 'button',
                      class: 'btn btn-primary',
-                     style: 'border-radius: 25px;background-color: #00d0ff;color:black;box-shadow: 5px 5px #888888;',
+                     style: 'border-radius: 25px;background-color:#00fffa;font-size: initial;color:black;box-shadow: 5px 5px #888888;',
                      'data-toggle': 'modal',
                      'data-target': `#${vid}`
                   });
@@ -471,7 +429,10 @@ function setBotResponse(val) {
                   BotResponse = base;
                   $(BotResponse).appendTo('#result_div').hide().fadeIn(1000);
                }
-            } else {
+
+            } 
+            
+            else {
                let base = createBaseChat();
                let response = createDiv((style = ['msg_cotainer']), (id = ''), (text = val[i].text));
                let timespan = createSpan((style = ['msg_time']), (text = time));
@@ -547,11 +508,11 @@ async function addSuggestion(textToAdd) {
             type: 'button',
             class: 'btn btn-primary',
             style:
-               'border-radius: 25px;background-color: #00d0ff;color:black;box-shadow: 5px 5px #888888;padding:12px 48px 12px 48p;margin-left:10px;',
+               'border-radius: 25px;background-color:#00fffa;font-size: initial;color:black;box-shadow: 5px 5px #888888;padding:12px 48px 12px 48p;margin-left:10px;',
             onClick: 'buttonResponse(this)',
             value: data.payload
          });
-         //$('<button class="btn btn-primary" style="border-radius: 25px;background-color: #00d0ff;color:black;font-size: 20px;box-shadow: 5px 5px #888888;">' + suggestions[i].title + '</button>').appendTo('.suggestion');
+         //$('<button class="btn btn-primary" style="border-radius: 25px;background-color:#00fffa;font-size: initial;color:black;font-size: 20px;box-shadow: 5px 5px #888888;">' + suggestions[i].title + '</button>').appendTo('.suggestion');
          //div.appendChild(outerButton)
          response1.appendChild(outerButton);
       });

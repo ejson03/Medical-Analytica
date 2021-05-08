@@ -13,7 +13,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-                <div class="card-header card-header-warning">
+                <div class="card-header card-header-primary">
                   <h4 class="card-title ">Doctor List</h4>
                   <p class="card-category"> List of Registered Doctors as of  <script>
                     document.write(new Date())
@@ -22,7 +22,7 @@
                 <div class="card-body table-responsive">
                   <div class="table-responsive">
                     <table class="table table-hover">
-                      <thead class="text-primary">
+                      <thead class="text-warning">
                         <th>
                           ID
                         </th>
@@ -79,7 +79,7 @@
                                   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                                     <div class="modal-content">
                                       <div class="modal-header">
-                                        <h5 class="modal-title text-primary" id="grantform-title-<%= doctors[doctor].username %>">DOCUMENT LIST<br>
+                                        <h5 class="modal-title text-warning" id="grantform-title-<%= doctors[doctor].username %>">DOCUMENT LIST<br>
                                         <p class="card-category "> <i class="material-icons">access_time</i> updated  <script>
                                           document.write(new Date())
                                         </script> ago </p></h5>
@@ -114,7 +114,7 @@
                                   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                                     <div class="modal-content">
                                       <div class="modal-header">
-                                        <h5 class="modal-title text-primary" id="revokeform-title-<%= doctors[doctor].username %>">DOCUMENT LIST<br>
+                                        <h5 class="modal-title text-warning" id="revokeform-title-<%= doctors[doctor].username %>">DOCUMENT LIST<br>
                                           <p class="card-category "> <i class="material-icons">access_time</i> updated  <script>
                                             document.write(new Date())
                                           </script> ago </p></h5>
@@ -148,7 +148,7 @@
                                   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                                     <div class="modal-content">
                                       <div class="modal-header">
-                                        <h5 class="modal-title text-primary" id="prescribeform-title-<%= doctors[doctor].username %>">PRESCRIPTIONS<br>
+                                        <h5 class="modal-title text-warning" id="prescribeform-title-<%= doctors[doctor].username %>">PRESCRIPTIONS<br>
                                           <p class="card-category "> <i class="material-icons">access_time</i> updated  <script>
                                             document.write(new Date())
                                           </script> ago </p></h5>
@@ -189,7 +189,7 @@
       const element = document.getElementById(app);
       const labelstart=`<div class=" table-responsive">
                                 <table class="table table-hover">
-                                  <thead class="text-primary">
+                                  <thead class="text-warning">
                                     <th> Document ID </th>
                                     <th> Description </th>
                                     <th> File</th>
@@ -229,7 +229,7 @@
       const element = document.getElementById(app);
       const labelstart=`<div class=" table-responsive">
                                 <table class="table table-hover">
-                                  <thead class="text-primary">
+                                  <thead class="text-warning">
 
                                     <th> Prescription </th>
                                     <th> Description </th>

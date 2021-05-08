@@ -149,21 +149,21 @@ services:
   #     - mongodb
   #   # restart: always
  
-  # main:
-  #   container_name: main
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #     target: app-backend
-  #   command: npm run deploy
-  #   ports:
-  #     - 5000:5000
-  #   depends_on:
-  #     - vault
-  #     - mongodb
-  #   restart: always
+  main:
+    container_name: main
+    env_file:
+      - .env
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: app-backend
+    command: npm run deploy
+    ports:
+      - 5000:5000
+    depends_on:
+      - vault
+      - mongodb
+    restart: always
  
   # build_medicalgraph:
   #   env_file:

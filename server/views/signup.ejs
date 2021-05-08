@@ -43,15 +43,15 @@
                         <form method="POST" class="register-form" id="register-form" action="/signup" > 
                             <div class="form-group">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="name" id="name" placeholder="Your Name" />
+                                <input type="text" name="name" id="name" placeholder="Your Name" required/>
                             </div>
                             <div class="form-group">
                                 <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" name="username" id="username" placeholder="Your Username"/>
+                                <input type="text" name="username" id="username" placeholder="Your Username" required/>
                             </div>
                             <div class="form-group">
                                 <label for="gender"><i class="zmdi zmdi-account material-icons-name   "></i></label>
-                                <select id="gender" name="gender" style="background:transparent; display:block;border: none;padding: 0px 30px; font-family: Poppins;box-sizing: border-box;" >
+                                <select id="gender" name="gender" style="background:transparent; display:block;border: none;padding: 0px 30px; font-family: Poppins;box-sizing: border-box;" required>
                                     <option  disabled selected> Choose your Gender </option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -62,7 +62,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="type"><i class="fa fa-plus-square"></i></label>
-                                <select id="type" name="schema" style="background:transparent;display: block;border: none;padding: 0px 30px; font-family: Poppins;box-sizing: border-box;" onchange="showDiv('hidden_div', this)" >
+                                <select id="type" name="schema" style="background:transparent;display: block;border: none;padding: 0px 30px; font-family: Poppins;box-sizing: border-box;" onchange="showDiv('hidden_div', this)" required>
                                     <option  disabled selected> Choose your Type </option>
                                     <option value="Doctor">Doctor</option>
                                     <option value="Patient"></i>Patient</option>
@@ -77,32 +77,32 @@
                             </div>
                             <div class="form-group" >
                                 <label for="institute"><i class="fa fa-user-md"></i></label>
-                                <input type="text" name="institute" id="institute" placeholder="Your Instituition"/ >
+                                <input type="text" name="institute" id="institute" placeholder="Your Instituition" / >
                             </div>
                             <div class="form-group" style="margin-bottom: 20px;" >
                                 <label for="specialization"><i class="fa fa-user-md"></i></label>
-                                <input type="text" name="specialization" id="specialization" placeholder="Your Specilization"/ >
+                                <input type="text" name="specialization" id="specialization" placeholder="Your Specilization" / >
                             </div>
                             </div>
                             <div class="form-group">
                                 <label for="phone"><i class="zmdi zmdi-phone"></i></label>
-                                <input type="number" name="phone" id="phone" placeholder="Your Phone Number" />
+                                <input type="number" name="phone" id="phone" placeholder="Your Phone Number" required/>
                             </div>
                             <div class="form-group">
                                 <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                <input type="email" name="email" id="email" placeholder="Your Email" />
+                                <input type="email" name="email" id="email" placeholder="Your Email" required/>
                             </div>
                             <div class="form-group">
                                 <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" name="pass" id="pass" placeholder="Password" />
+                                <input type="password" name="pass" id="pass" placeholder="Password" required/>
                             </div>
                             <div class="form-group">
                                 <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                                <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" />
+                                <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" required/>
                             </div>
 
                             <div class="form-group">
-                                <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+                                <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" required/>
                                 <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
                             </div>
                             <div class="form-group form-button">
@@ -132,6 +132,5 @@
         document.getElementById(divId).style.display = element.value == 'Patient' ? 'none' : 'block';
     }
     </script>
-
 </body>
 </html>

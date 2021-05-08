@@ -35,7 +35,7 @@ def get_quotes():
     image = get_base64(f'{quote["Quote"]}   \n  --  {quote["Author"]}  -- ')
     return image
 
-if __name__ == "__main__":
-    print(get_music('happy'))
-    print(get_jokes())
-    print(get_quotes())
+# if __name__ == "__main__":
+#     print(get_music('happy'))
+#     print(get_jokes())
+#     print(get_quotes())
