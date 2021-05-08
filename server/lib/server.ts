@@ -6,6 +6,8 @@ import cors from 'cors';
 import router from './routes';
 
 import * as config from './config';
+import PassportModelsGenerate from './services/Passport';
+import passport from 'passport';
 
 const app = express();
 
@@ -28,10 +30,9 @@ app.use(
       }
    })
 );
-app.use(express.static('./public'));
-app.set('views', './views');
-app.set('view engine', 'ejs');
-app.engine('.html', require('ejs').renderFile);
+   app.use(passport.initialize());
+   app.use(passport.session());
+   await PassportModelsGenerate();
 
 app.use('/', router);
 app.get('/dashboard', (_req, res) => {
