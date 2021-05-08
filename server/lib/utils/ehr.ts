@@ -1,3 +1,5 @@
+import { Endpoints, EndpointsResponse } from 'bigchaindb-driver/types/connection';
+import { MetadataInterface } from '../models/user.models';
 import { cryptoService, ipfsService, bigchainService } from '../services';
 import { decryptRSA } from '../services/crypto';
 
@@ -10,27 +12,8 @@ export const getRSAKey = async (email: string, schema: string) => {
 };
 
 export const getBigchainPublicKey = async (email: string, schema: string) => {
-   let asset = await bigchainService.getAsset(email);
-   asset.filter((data: any) => {
-      return data['data']['schema'] == schema;
-   });
+   const asset = (await bigchainService.getAsset(email)).filter(({ data }) => data['schema'] == schema);
    return asset[0]['data']['bigchainKey'];
-};
-
-export const getEmail = async (key: any, schema: string) => {
-   let asset = await bigchainService.getAsset(key);
-   asset.filter((data: any) => {
-      return data['data']['schema'] == schema;
-   });
-   return asset[0]['data']['email'];
-};
-
-export const getMultipleEmail = async (schema: string) => {
-   let asset = await bigchainService.getAsset({});
-   let data = asset.filter((data: any) => {
-      if (data['data']['schema'] == schema) return data['email'];
-   });
-   return data;
 };
 
 export const createAccess = async (
@@ -48,10 +31,9 @@ export const createAccess = async (
          email: doctorEmail,
          key: encryptedKey
       };
-      let metadata = transaction[transaction.length - 1].metadata;
+      let metadata = (transaction[transaction.length - 1].metadata as unknown) as MetadataInterface;
       metadata.datetime = new Date();
-      metadata['doclist'].push(data);
-      console.log('metadata is ', metadata);
+      metadata.doclist?.push(data);
 
       let tx = await bigchainService.transferAsset(
          transaction[transaction.length - 1],
@@ -66,9 +48,8 @@ export const createAccess = async (
 export const revokeAccess = async (dlist: any, publicKey: string, privateKey: string, doctorEmail: string) => {
    for (const description of dlist) {
       const transaction = await bigchainService.listTransactions(description);
-      const metadata = transaction[transaction.length - 1].metadata;
-      let doclist = metadata.doclist;
-      doclist = doclist.filter((item: any) => item.email != doctorEmail);
+      const metadata = (transaction[transaction.length - 1].metadata as unknown) as MetadataInterface;
+      const doclist = metadata.doclist?.filter(({ email }) => email != doctorEmail);
       metadata.doclist = doclist;
       console.log('metadata is ', metadata);
       let tx = await bigchainService.transferAsset(
@@ -82,12 +63,15 @@ export const revokeAccess = async (dlist: any, publicKey: string, privateKey: st
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const showAccess = async (demail: string, records: any) => {
-   let data: any = [];
+export const showAccess = async (demail: string, records?: EndpointsResponse[Endpoints.assets]) => {
+   if (records == null) return [];
+   const data: EndpointsResponse[Endpoints.assets] = [];
+
    for (const asset of records) {
       const transaction = await bigchainService.listTransactions(asset.id);
-      const doclist = transaction[transaction.length - 1].metadata.doclist;
-      let result = doclist.filter((st: any) => st.email.includes(demail));
+      const doclist = ((transaction[transaction.length - 1].metadata as unknown) as MetadataInterface).doclist;
+      if (doclist == null) continue;
+      const result = doclist.filter((st: any) => st.email.includes(demail));
       if (result.length == 0) {
          data.push(asset);
       }
@@ -96,13 +80,15 @@ export const showAccess = async (demail: string, records: any) => {
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const showRevoke = async (demail: string, records: any) => {
-   let data: any = [];
+export const showRevoke = async (demail: string, records?: EndpointsResponse[Endpoints.assets]) => {
+   if (records == null) return [];
 
+   const data: EndpointsResponse[Endpoints.assets] = [];
    for (const asset of records) {
       const transaction = await bigchainService.listTransactions(asset.id);
-      const doclist = transaction[transaction.length - 1].metadata.doclist;
-      let result = doclist.filter((st: any) => st.email.includes(demail));
+      const doclist = ((transaction[transaction.length - 1].metadata as unknown) as MetadataInterface).doclist;
+      if (doclist == null) continue;
+      const result = doclist.filter((st: any) => st.email.includes(demail));
       if (result.length != 0) {
          data.push(asset);
       }
@@ -158,7 +144,6 @@ export const createRecord = async (
          fileHash: cryptoService.hash(cipher),
          id: id,
          date: date
-
       });
    }
 
@@ -174,32 +159,31 @@ export const createRecord = async (
 };
 
 export const getAssetHistory = async (assetid: any) => {
-   const data: any = [];
    const transactions = await bigchainService.listTransactions(assetid);
-   for (const transaction of transactions) {
-      const filterTransaction: any = {
+   return transactions.map(transaction => {
+      const filterTransaction = {
          operation: transaction.operation,
          date: transaction.metadata.datetime,
-         doctor: []
+         doctor: [] as string[]
       };
       if (transaction.operation == 'TRANSFER') {
-         if (transaction.metadata.doclist.length > 0) {
-            for (const doc of transaction.metadata.doclist) {
-               filterTransaction['doctor'].push(doc.email);
+         const doclist = ((transaction.metadata as unknown) as MetadataInterface).doclist;
+         if (doclist != null && doclist.length > 0) {
+            for (const doc of doclist) {
+               filterTransaction.doctor.push(doc.email);
             }
          }
       }
-      data.push(filterTransaction);
-   }
-   return data;
+      return filterTransaction;
+   });
 };
 
 export const getPrescription = async (_username: string, demail: string, secretKey: string) => {
-   console.log(_username, demail, secretKey)
+   console.log(_username, demail, secretKey);
    const data: any = [];
    const assets = await bigchainService.getAsset(demail);
    for (const asset of assets) {
-      if (asset.data.schema === "record" && asset.data.hasOwnProperty("prescription")) {
+      if (asset.data.schema === 'record' && asset.data.hasOwnProperty('prescription')) {
          data.push({
             prescription: asset.data.prescription,
             description: asset.data.description
@@ -212,20 +196,22 @@ export const getPrescription = async (_username: string, demail: string, secretK
 export const getDoctorFiles = async (email: string, privateRSAKey: any) => {
    const metadata = await bigchainService.getMetadata(email);
    const data: any = {};
-   const assetSet = new Set();
+   const assetSet = new Set<string>();
 
    for (const meta of metadata) {
       const tx = await bigchainService.listTransactions(meta.id);
-      assetSet.add(tx[tx.length - 1].asset.id);
+      assetSet.add((tx[tx.length - 1].asset as { id: string }).id);
    }
    let assetList = [...assetSet];
    assetList = assetList.filter(function (element: any) {
       return element !== undefined;
    });
    for (const asset of assetList) {
-
       const tx = await bigchainService.listTransactions(asset);
-      const docs = tx[tx.length - 1].metadata.doclist;
+
+      const docs = ((tx[tx.length - 1].metadata as unknown) as MetadataInterface).doclist;
+      if (docs == null) continue;
+
       let result = docs.filter((st: any) => st.email.includes(email));
       if (result.length != 0) {
          const decryptionKey = decryptRSA(result[0].key, privateRSAKey);
@@ -247,7 +233,7 @@ export const getDoctorFiles = async (email: string, privateRSAKey: any) => {
                secret: decryptionKey
             });
          } catch {
-            console.log(ass[0].data.file, decryptionKey)
+            console.log(ass[0].data.file, decryptionKey);
             continue;
          }
       }

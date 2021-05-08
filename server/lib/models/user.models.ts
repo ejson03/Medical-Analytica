@@ -1,3 +1,4 @@
+import { Endpoints, EndpointsResponse } from 'bigchaindb-driver/types/connection';
 import { cryptoService, bigchainService, vaultService } from '../services';
 
 export interface UserInterface {
@@ -63,10 +64,11 @@ export interface MetadataInterface {
 }
 
 export default class UserModel {
-   public records: [] = [];
+   public records: EndpointsResponse[Endpoints.assets] = [];
    public user = {} as UserInterface;
    public secrets = {} as SecretInterface;
    public clientToken: string = '';
+   public schema?: 'Patient' | 'Doctor' = 'Doctor';
 
    constructor(user?: UserModel) {
       if (user) {
@@ -77,26 +79,25 @@ export default class UserModel {
    }
 
    async getBio(username: string, schema: string) {
-         const records = await bigchainService.getAsset(username);
-         const filteredRecords = records.filter(record => record.data.schema == schema);
-         this.user = filteredRecords[0]['data'];
-         await this.readKeys();
+      const records = await bigchainService.getAsset(username);
+      const filteredRecords = records.filter(record => record.data.schema == schema);
+      this.user = (filteredRecords[0].data as unknown) as UserInterface;
+      this.schema = this.user.schema;
+      await this.readKeys();
    }
 
    private async writeKeys(username: string) {
-         const clientVault = await vaultService.vaultFromToken(this.clientToken);
-         this.secrets!.secretKey = cryptoService.createSecretKey();
-         const bigchainKeys = bigchainService.createBigchainKeys(
-            cryptoService.encrypt(username, this.secrets.secretKey)
-         );
-         this.secrets!.bigchainPrivateKey = bigchainKeys.privateKey;
-         this.secrets!.bigchainPublicKey = bigchainKeys.publicKey;
-         const { privateKey, publicKey } = cryptoService.generateRSAKeys();
-         this.secrets!.RSAPrivateKey = privateKey;
-         this.secrets!.RSAPublicKey = publicKey;
-         for (const secret in this.secrets) {
-            vaultService.write(clientVault, secret, this.secrets[secret]);
-         }
+      const clientVault = await vaultService.vaultFromToken(this.clientToken);
+      this.secrets!.secretKey = cryptoService.createSecretKey();
+      const bigchainKeys = bigchainService.createBigchainKeys(cryptoService.encrypt(username, this.secrets.secretKey));
+      this.secrets!.bigchainPrivateKey = bigchainKeys.privateKey;
+      this.secrets!.bigchainPublicKey = bigchainKeys.publicKey;
+      const { privateKey, publicKey } = cryptoService.generateRSAKeys();
+      this.secrets!.RSAPrivateKey = privateKey;
+      this.secrets!.RSAPublicKey = publicKey;
+      for (const secret in this.secrets) {
+         vaultService.write(clientVault, secret, this.secrets[secret]);
+      }
    }
 
    private async readKeys() {
@@ -109,34 +110,34 @@ export default class UserModel {
    }
 
    async createUser(asset: UserInterface, password: string) {
-         const vault = vaultService.Vault;
-         await vaultService.signUp(vault, password, asset.username)
-         const status = await vaultService.login(vault, password, asset.username);
-         if (status == null) {
-            throw new Error("Unable to sign in")
-         }
-         const vaultClientToken = status.auth.client_token;
-         this.clientToken = vaultClientToken
-         await this.writeKeys(asset.username);
-         asset.bigchainKey = this.secrets.bigchainPublicKey.toString();
-         asset.RSAKey = this.secrets.RSAPublicKey.toString();
-         asset.date = new Date().toString();
-         let tx = await bigchainService.createAsset(
-            asset,
-            null,
-            this.secrets.bigchainPublicKey,
-            this.secrets.bigchainPrivateKey
-         );
-         this.user = tx.asset.data;
-         return tx.asset.data;
+      const vault = vaultService.Vault;
+      await vaultService.signUp(vault, password, asset.username);
+      const status = await vaultService.login(vault, password, asset.username);
+      if (status == null) {
+         throw new Error('Unable to sign in');
+      }
+      const vaultClientToken = status.auth.client_token;
+      this.clientToken = vaultClientToken;
+      await this.writeKeys(asset.username);
+      asset.bigchainKey = this.secrets.bigchainPublicKey.toString();
+      asset.RSAKey = this.secrets.RSAPublicKey.toString();
+      asset.date = new Date().toString();
+      let tx = await bigchainService.createAsset(
+         asset,
+         null,
+         this.secrets.bigchainPublicKey,
+         this.secrets.bigchainPrivateKey
+      );
+      this.user = (tx.asset.data as unknown) as UserInterface;
+      return tx.asset.data;
    }
 
    async getRecords(username: string) {
       try {
          const records = await bigchainService.getAsset(username);
-         const filterRecords = records.filter(
-            record => record.data.schema == 'record' && record.data.username == username
-         ).sort((a,b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+         const filterRecords = records
+            .filter(record => record.data.schema == 'record' && record.data.username == username)
+            .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
          this.records = filterRecords;
          return filterRecords;
       } catch (err) {
