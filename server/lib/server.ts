@@ -1,5 +1,4 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import cors from 'cors';
@@ -13,38 +12,49 @@ import passport from 'passport';
 
 import * as Mongo from './services/mongo';
 
-const app = express();
+async function App() {
+   const app = express();
+   app.use(express.static('./public'));
+   app.set('views', './views');
+   app.set('view engine', 'ejs');
+   app.engine('.html', require('ejs').renderFile);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+   app.use(express.json());
+   app.use(express.urlencoded({ extended: true }));
+   app.use(cors());
 
    await Mongo.Connect();
 
    if (Mongo.client != null)
-app.use(
-   session({
+      app.use(
+         session({
             store: MongoStore.create({ client: Mongo.client, dbName: 'session-db' }),
 
-      secret: config.SECRET,
+            secret: config.SECRET,
             resave: true,
             saveUninitialized: true,
-      cookie: {
-         maxAge: 1000 * 60 * 60 * 24
-      }
-   })
-);
+            cookie: {
+               maxAge: 1000 * 60 * 60 * 24
+            }
+         })
+      );
    app.use(passport.initialize());
    app.use(passport.session());
    await PassportModelsGenerate();
 
-app.use('/', router);
-app.get('/dashboard', (_req, res) => {
-   res.render('dashboard.html');
-});
+   app.use('/', router);
+   app.get('/dashboard', (_req, res) => {
+      res.render('dashboard.html');
+   });
 
    await Vault.Setup();
 
-app.listen(config.PORT, function () {
-   console.log(`App listening on port ${config.PORT}`);
-});
+   return app;
+}
+App()
+   .then(app => {
+      app.listen(config.PORT, function () {
+         console.log(`App listening on port ${config.PORT}`);
+      });
+   })
+   .catch(err => console.error(err));
