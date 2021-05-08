@@ -2,23 +2,14 @@ import logging
 import pandas as pd
 import numpy as np
 import spacy
+import os
 from sklearn.metrics.pairwise import cosine_similarity
 
 nlp = spacy.load('en_core_web_md')
-diagnosis_df = pd.read_pickle("./actions/assets/pickle/diagnosis_data.pkl")
-symptoms_df = pd.read_pickle("./actions/assets/pickle/symptoms.pkl")
+ROOT_DIR = os.getcwd()
 
-# # logging config
-# for handler in logging.root.handlers[:]:
-#     logging.root.removeHandler(handler)
-
-# logging.basicConfig(
-#     filename='logging.log',
-#     filemode='a',
-#     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-#     datefmt='%H:%M:%S',
-#     level=logging.DEBUG
-# )
+diagnosis_df = pd.read_pickle(ROOT_DIR + "/actions/assets/pickle/diagnosis_data.pkl")
+symptoms_df = pd.read_pickle(ROOT_DIR + "/actions/assets/pickle/symptoms.pkl")
 
 
 def encode_symptom(symptom):

@@ -60,7 +60,7 @@ services:
       interval: 3s
       timeout: 5s
       retries: 3
-    command: ".ci/entrypoint.sh"
+    command: "bash .ci/entrypoint.sh"
     restart: always
     
   tendermint:
@@ -84,14 +84,8 @@ services:
       - 8200:8200
     cap_add:
       - "IPC_LOCK"
-    depends_on: 
-      bigchaindb:
-        condition: service_healthy
-      neo4j:
-        condition: service_healthy
     environment:
       VAULT_LOCAL_CONFIG: '{"backend" : {"file" : {"path" : "/vault/file"}}}'
-      VAULT_API_ADDR: http://127.0.0.1:8200
     volumes:
       - vault_config:/vault/config
       - vault_policies:/vault/policies
@@ -101,6 +95,7 @@ services:
       interval: 2s
       timeout: 3s
       retries: 30
+    restart: always
    
   neo4j:
     image: neo4j
@@ -123,53 +118,53 @@ services:
       retries: 25 
     restart: always
   
-  # server:
-  #   container_name: rasa-server
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #     target: chatbot
-  #   volumes:
-  #     - ./chatbot:/app
-  #   ports:
-  #     - 5005:5005
-  #   depends_on:
-  #     - action
+  server:
+    container_name: rasa-server
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: chatbot
+    # volumes:
+    #   - ./chatbot:/app
+    ports:
+      - 5005:5005
+    depends_on:
+      - action
+  
+  action:
+    container_name: rasa-action
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: action
+    ports:
+      - "5055:5055"
+    depends_on:
+      - mongodb
+      - neo4j
+    # volumes:
+    #   - ./actions:/app
 
-      
-  # action:
-  #   container_name: rasa-action-server
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #     target: action
-  #   ports:
-  #     - "5055:5055"
-  #   volumes:
-  #     - ./actions:/app
- 
-
-  # main:
-  #   container_name: main
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #     target: app-backend
-  #   volumes:
-  #     - ./server:/app/server
-  #   command: npm run deploy
-  #   ports:
-  #     - 5000:5000
-  #   depends_on:
-  #     - vault
-  #     - server
- 
+  main:
+    container_name: main
+    env_file:
+      - .env
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: app-backend
+    volumes:
+      - ./server:/app/server
+    command: npm run deploy
+    ports:
+      - 5000:5000
+    depends_on:
+      - vault
+      - server
 
   # nginx:
   #   container_name: "nginx"
@@ -181,7 +176,18 @@ services:
   #   depends_on:
   #     - server
 
- 
+  build_medicalgraph:
+    env_file:
+      - .env
+    build:
+      context: ./QA-engine/Knowledge-Base
+      dockerfile: Dockerfile
+    environment:
+      NEO4J_URL: "neo4j"
+    depends_on: 
+      neo4j:
+        condition: service_healthy
+    restart: always
 
 volumes:
   tm_data: {}

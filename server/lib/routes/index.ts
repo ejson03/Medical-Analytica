@@ -10,7 +10,7 @@ import userRouter from './user.routes';
 import commonRouter from './common.routes';
 import chatbotRouter from './chatbot.routes';
 import UserModel from '../models/user.models';
-import { IsAuthenticated, IsDoctor, IsPatient } from '../utils/AuthCheck';
+import { IsDoctor, IsPatient } from '../utils/AuthCheck';
 
 const router: Router = Router();
 
@@ -21,6 +21,6 @@ router.get('/status', (_req, res) => {
 router.use('/', commonRouter);
 router.use('/user', IsPatient, userRouter);
 router.use('/doctor', IsDoctor, doctorRouter);
-router.use('/chatbot', IsAuthenticated, chatbotRouter);
+router.use('/chatbot', chatbotRouter);
 
 export default router;

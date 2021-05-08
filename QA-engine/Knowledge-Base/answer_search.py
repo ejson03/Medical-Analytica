@@ -3,10 +3,10 @@ from py2neo import Graph
 class AnswerSearcher:
     def __init__(self):
         self.g = Graph(
-            host=os.getenv("NEO4J_URL") or "localhost",
-            http_port=7474,
-            user="neo4j",
-            password="password")
+            host=os.getenv("NEO4J_URL") or "localhost",  
+            port=int(os.getenv("NEO4J_PORT") or 7687),  
+            user=os.getenv("NEO4J_USER") or None,  
+            password=os.getenv("NEO4J_PASSWORD") or None)
         self.num_limit = 20
 
     def search_main(self, sqls):

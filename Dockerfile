@@ -10,11 +10,14 @@ RUN apt-get update && apt-get -y install build-essential python3-dev libffi-dev 
 FROM base as action
 WORKDIR /app
 COPY ./actions /app/actions
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH "${PYTHONPATH}:/app/actions:/app:/app/actions/modules"
 CMD ["run", "actions"]
 
 FROM base as chatbot
 WORKDIR /app
 COPY ./chatbot /app
 # VOLUME /app
+ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH "${PYTHONPATH}:/app/custom:/app"
 CMD [ "run","--enable-api","--cors","*","--debug" ]

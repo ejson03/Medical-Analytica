@@ -5,9 +5,11 @@ import random
 import urllib.request
 import urllib.parse
 import re
-from actions.modules.quotes import get_base64
+from modules.quotes import get_base64
 
-path = "./actions/assets/json/"
+ROOT_DIR = os.getcwd()
+path = ROOT_DIR + "/actions/assets/json/"
+
 
 def get_url(query):
     query_string = urllib.parse.urlencode({"search_query" : query})

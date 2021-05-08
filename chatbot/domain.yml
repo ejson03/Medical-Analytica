@@ -170,6 +170,10 @@ slots:
     type: list
   username:
     type: text
+  sure:
+    type: text
+  disease:
+    type: text
   weight:
     type: unfeaturized
     auto_fill: false

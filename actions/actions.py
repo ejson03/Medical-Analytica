@@ -1,6 +1,6 @@
 from pymongo import MongoClient
-from actions.modules.utils import *
-from actions.modules.diagnose import encode_symptom, create_illness_vector, get_diagnosis
+from modules.utils import *
+from modules.diagnose import encode_symptom, create_illness_vector, get_diagnosis
 import dateparser as ddp
 import os, requests, base64, uuid
 from os import environ
@@ -17,11 +17,14 @@ import pandas as pd
 
 load_dotenv()
 
+ROOT_DIR = os.getcwd()
+
+APP_URL= os.environ.get("WEATHER_KEY")
 WEATHER_KEY= os.environ.get("WEATHER_KEY")
 WEATHER_ID= os.environ.get("WEATHER_ID")
 
 client = MongoClient(os.getenv("MONGO_URL"))
-disease_file = './actions/assets/disease.txt'
+disease_file = ROOT_DIR + '/actions/assets/disease.txt'
 disease_names = [i.strip() for i in open(disease_file, 'r', encoding='UTF-8').readlines()]
 
 try:
@@ -37,13 +40,17 @@ except Exception as e:
 
 def retrieve_disease_name(name):
     names = []
-    name = '.*' + '.*'.join(list(name)) + '.*'
+    print(name)
+    name = '.*' + name + '.*'
     import re
+    print(name)
     pattern = re.compile(name)
     for i in disease_names:
         candidate = pattern.search(i)
         if candidate:
+            print(candidate)
             names.append(candidate.group())
+    print(names)
     return names
 
 
@@ -469,12 +476,11 @@ class ActionSearchTreat(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]):
         disease = tracker.get_slot("disease")
-        pre_disease = tracker.get_slot("sure")
-        print("pre_disease::::" + str(pre_disease))
-        
+
         possible_diseases = retrieve_disease_name(disease)
-        if disease == pre_disease or len(possible_diseases) == 1:
-            a = graph.run("match (a:Disease{name: {disease}}) return a", disease=disease).data()[0]['a']
+        if  len(possible_diseases) == 1:
+            print("entering the",possible_diseases)
+            a = graph.run("match (a:Disease{name: $disease}) return a", disease=disease).data()[0]['a']
             if "intro" in a:
                 intro = a['intro']
                 template = "{0}Introduction: {1}"
@@ -489,11 +495,6 @@ class ActionSearchTreat(Action):
             else:
                 retmsg = disease + "No common treatment"
             dispatcher.utter_message(retmsg)
-        elif len(possible_diseases) > 1:
-            buttons = []
-            for d in possible_diseases:
-                buttons.append(make_button(d, '/search_treat{{"disease":"{0}", "sure":"{1}"}}'.format(d, d)))
-            dispatcher.utter_button_message("Please click to select the disease you want to inquire, if there is nothing you want, please ignore this message", buttons)
         else:
             dispatcher.utter_message("Nothing in the knowledge base {0}".format(disease))
         return []
@@ -507,19 +508,13 @@ class ActionSearchSymptom(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]):
         disease = tracker.get_slot("disease")
-        pre_disease = tracker.get_slot("sure")
-        print("pre_disease::::" + str(pre_disease))
         
         possible_diseases = retrieve_disease_name(disease)
-        if disease == pre_disease or len(possible_diseases) == 1:
-            retmsg = [x['s.name'] for x in graph.run("MATCH (p:Disease{name: {disease}})-[r:has_symptom]->\
+        if len(possible_diseases) == 1:
+            print("entering the",possible_diseases)
+            retmsg = [x['s.name'] for x in graph.run("MATCH (p:Disease{name: $disease})-[r:has_symptom]->\
                                                 (s:Symptom) RETURN s.name", disease=disease).data()]
             dispatcher.utter_message(retmsg)
-        elif len(possible_diseases) > 1:
-            buttons = []
-            for d in possible_diseases:
-                buttons.append(make_button(d, '/search_symptom{{"disease":"{0}", "sure":"{1}"}}'.format(d, d)))
-            dispatcher.utter_button_message("Please click to select the disease you want to inquire, if there is nothing you want, please ignore this message", buttons)
         else:
             dispatcher.utter_message("Nothing in the knowledge base {0} Related symptom records".format(disease))
 
@@ -535,12 +530,11 @@ class ActionSearchCause(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]):
         disease = tracker.get_slot("disease")
-        pre_disease = tracker.get_slot("sure")
-        print("pre_disease::::" + str(pre_disease))
-        
+
         possible_diseases = retrieve_disease_name(disease)
-        if disease == pre_disease or len(possible_diseases) == 1:
-            a = graph.run("match (a:Disease{name: {disease}}) return a.cause", disease=disease).data()[0]['a.cause']
+        if len(possible_diseases) == 1:
+            print("entering the",possible_diseases)
+            a = graph.run("match (a:Disease{name: $disease}) return a.cause", disease=disease).data()[0]['a.cause']
             if "treat" in a:
                 treat = a['treat']
                 template = "{0}The treatment methods are:{1}"
@@ -548,11 +542,6 @@ class ActionSearchCause(Action):
             else:
                 retmsg = disease + "No record of the cause of the disease"
             dispatcher.utter_message(retmsg)
-        elif len(possible_diseases) > 1:
-            buttons = []
-            for d in possible_diseases:
-                buttons.append(make_button(d, '/search_cause{{"disease":"{0}", "sure":"{1}"}}'.format(d, d)))
-            dispatcher.utter_button_message("Please click to select the disease you want to inquire, if there is nothing you want, please ignore this message", buttons)
         else:
             dispatcher.utter_message("Nothing in the knowledge base {0} Related cause records".format(disease))
         return []
@@ -566,21 +555,14 @@ class ActionSearchDiseaseDept(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]):
         disease = tracker.get_slot("disease")
-        pre_disease = tracker.get_slot("sure")
-        print("pre_disease::::" + str(pre_disease))
-        
+
         possible_diseases = retrieve_disease_name(disease)
-        if disease == pre_disease or len(possible_diseases) == 1:
-            result = graph.run("match (a:Disease{name: {disease}})-[:belongs_to]->(s:Department) return s.name",
+        if len(possible_diseases) == 1:
+            print("entering the",possible_diseases)
+            result = graph.run("match (a:Disease{name: $disease})-[:belongs_to]->(s:Department) return s.name",
                           disease=disease).data()[0]['s.name']
             template = f"{disease} belongs {result}"
             dispatcher.utter_message(text = template)
-
-        elif len(possible_diseases) > 1:
-            buttons = []
-            for d in possible_diseases:
-                buttons.append(make_button(d, '/search_disease_dept{{"disease":"{0}", "sure":"{1}"}}'.format(d, d)))
-            dispatcher.utter_button_message("Please click to select the disease you want to inquire,if there is nothing you want, please ignore this message", buttons)
         else:
             dispatcher.utter_message("Nothing in the knowledge base {0} Disease-related department records".format(disease))
         return []
