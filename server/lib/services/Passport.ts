@@ -36,7 +36,6 @@ export default async function PassportModelsGenerate() {
                const user = new UserModel();
                user.clientToken = status.auth.client_token;
                await user.getBio(username, req.body.schema);
-               await user.getRecords(username);
                return done(null, user);
             } catch (error) {
                console.error(error);

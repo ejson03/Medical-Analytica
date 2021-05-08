@@ -7,16 +7,14 @@ import { filterRecords } from '../utils/filteration.js';
 export const getFilteredRecords = async (req: Request, res: Response) => {
    const { username } = req.body;
    const query = req.body as Partial<RecordInterface>;
-   const user = new UserModel();
-   const records = await user.getRecords(username);
+   const records = await UserModel.getRecords(username);
    const filtered = filterRecords(records, query);
    return res.json(filtered);
 };
 
 export const getAll = async (req: Request, res: Response) => {
    const { username } = req.body;
-   const user = new UserModel();
-   const records = await user.getRecords(username);
+   const records = await UserModel.getRecords(username);
    return res.json(records);
 };
 

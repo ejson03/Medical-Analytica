@@ -9,6 +9,7 @@ import {
 } from '../utils/ehr.js';
 import { bigchainService } from '../services';
 import type { Request, Response } from 'express';
+import UserModel from '../models/user.models';
 
 export const getDoctorList = async (req: Request, res: Response) => {
    try {
@@ -23,7 +24,7 @@ export const getDoctorList = async (req: Request, res: Response) => {
 export const getMedicalHistory = async (req: Request, res: Response) => {
    try {
       if (req.user) {
-         const records = await req.user?.getRecords(req.user.user.username!);
+         const records = await UserModel.getRecords(req.user.user.username!);
          return res.render('patient/history.ejs', { records: records, name: req.user.user.name });
       }
    } catch (err) {
@@ -35,7 +36,8 @@ export const getMedicalHistory = async (req: Request, res: Response) => {
 export const postAccess = async (req: Request, res: Response) => {
    const doctor: string = req.body.value as string;
    try {
-      const data = await showAccess(doctor, req.user?.records);
+      const records = await UserModel.getRecords(req.user?.user.username!);
+      const data = await showAccess(doctor, records);
       return res.json({ records: data });
    } catch (err) {
       console.error(err);
@@ -46,7 +48,8 @@ export const postAccess = async (req: Request, res: Response) => {
 export const postRevoke = async (req: Request, res: Response) => {
    const doctor: string = req.body.value as string;
    try {
-      const data = await showRevoke(doctor, req.user?.records);
+      const records = await UserModel.getRecords(req.user?.user.username!);
+      const data = await showRevoke(doctor, records);
       return res.json({ records: data });
    } catch (err) {
       console.error(err);

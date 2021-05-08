@@ -64,7 +64,6 @@ export interface MetadataInterface {
 }
 
 export default class UserModel {
-   public records: EndpointsResponse[Endpoints.assets] = [];
    public user = {} as UserInterface;
    public secrets = {} as SecretInterface;
    public clientToken: string = '';
@@ -74,7 +73,6 @@ export default class UserModel {
       if (user) {
          this.secrets = user.secrets;
          this.user = user.user;
-         this.records = user.records;
       }
    }
 
@@ -132,13 +130,12 @@ export default class UserModel {
       return tx.asset.data;
    }
 
-   async getRecords(username: string) {
+   public static async getRecords(username: string) {
       try {
          const records = await bigchainService.getAsset(username);
          const filterRecords = records
             .filter(record => record.data.schema == 'record' && record.data.username == username)
             .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
-         this.records = filterRecords;
          return filterRecords;
       } catch (err) {
          console.error(err);
