@@ -63,7 +63,5 @@ def write_image(text):
     draw = ImageDraw.Draw(img)
     return img
 
-if __name__ == "__main__":
-    print(get_base64("heya ......"))
-
-
+# if __name__ == "__main__":
+#     print(get_base64("heya ......"))

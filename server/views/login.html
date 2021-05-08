@@ -32,13 +32,13 @@
             <div class="container">
                 <div class="signin-content">
                     <div class="signin-image">
-                        <figure><img src="/images/login.jpg" alt="sing up image"></figure>
+                        <figure><img src="/images/logo.png" alt="sing up image"></figure>
                         <a href="/signup" class="signup-image-link">Create an account</a>
                     </div>
 
                     <div class="signin-form">
                         <h2 class="form-title">Login</h2>
-                        <form method="POST" class="register-form" id="login-form" action="/login">
+                        <form method="POST" class="register-form" id="login-form" action="/login" onsubmit="return myFunction();">
                             <div class="form-group">
                                 <label for="name"><i class="zmdi zmdi-account material-icons-name   "></i></label>
                                 <select id="type" name="schema" style="background:transparent;display: block;border: none;padding: 0px 30px; font-family: Poppins;box-sizing: border-box;" onchange="showDiv('hidden_div', this)" >
@@ -87,5 +87,17 @@
     <!-- JS -->
     <script src="/vendor/vendorlogin/jquery/jquery.min.js"></script>
     <script src="/js/jslogin/main.js"></script>
+    <script>
+    function myFunction()
+    {
+
+        fetch('/login')
+        .then(function(response) {
+        return alert(" User not created " );
+        })
+        ;
+
+    }
+    </script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>

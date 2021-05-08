@@ -38,7 +38,7 @@ border-radius: 0 0 15px 15px !important;
   border-radius: 0px 0px 0px 15px !important;
   border:0 !important;
   color:white !important;
-  font-size:20px ;
+  font-size: initial;
   height: 70px !important;
   overflow-y: auto;
   padding-left: 15px;
@@ -152,10 +152,10 @@ margin-top: auto;
 margin-bottom: auto;
 margin-left: 10px;
 border-radius: 25px;
-background-color: #00d0ff;
+background-color: #00fffa;
 padding: 10px;
 position: relative;
-font-size: 20px;
+font-size: initial;
 box-shadow: 5px 5px #888888;
 }
 .msg_cotainer_send{
@@ -163,10 +163,10 @@ margin-top: auto;
 margin-bottom: auto;
 margin-right: 10px;
 border-radius: 25px;
-background-color: #78e08f;
+background-color: #00ff38;
 padding: 10px;
 position: relative;
-font-size: 20px;
+font-size: initial;
 box-shadow: 5px 5px #888888;
 }
 .msg_time{
