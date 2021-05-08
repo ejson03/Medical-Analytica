@@ -17,63 +17,63 @@ services:
       start_period: 40s
     restart: always
 
-  # bigchaindb:
-  #   container_name: bigchaindb
-  #   depends_on:
-  #     - mongodb
-  #     - tendermint
-  #   build:
-  #     context: bigchaindb
-  #     dockerfile: Dockerfile-dev
-  #   # volumes:
-  #     # - ./bigchaindb:/usr/src/app/bigchaindb
-  #     # - ./tests:/usr/src/app/tests
-  #     # - ./docs:/usr/src/app/docs
-  #     # - ./htmlcov:/usr/src/app/htmlcov
-  #     # - ./setup.py:/usr/src/app/setup.py
-  #     # - ./setup.cfg:/usr/src/app/setup.cfg
-  #     # - ./pytest.ini:/usr/src/app/pytest.ini
-  #     # - ./tox.ini:/usr/src/app/tox.ini
-  #   environment:
-  #     BIGCHAINDB_DATABASE_BACKEND: localmongodb
-  #     BIGCHAINDB_DATABASE_HOST: mongodb
-  #     BIGCHAINDB_DATABASE_PORT: 27017
-  #     # BIGCHAINDB_DATABASE_LOGIN: "${MONGO_USER}"
-  #     # BIGCHAINDB_DATABASE_PASSWORD: "${MONGO_PASS}"
-  #     BIGCHAINDB_SERVER_BIND: 0.0.0.0:9984
-  #     BIGCHAINDB_WSSERVER_HOST: 0.0.0.0
-  #     BIGCHAINDB_WSSERVER_ADVERTISED_HOST: bigchaindb
-  #     BIGCHAINDB_TENDERMINT_HOST: tendermint
-  #     BIGCHAINDB_TENDERMINT_PORT: 26657
-  #   ports:
-  #     - "9984:9984"
-  #     - "9985:9985"
-  #     - "26658:26658"
-  #   healthcheck:
-  #     test:
-  #       [
-  #         "CMD",
-  #         "bash",
-  #         "-c",
-  #         "curl http://bigchaindb:9984 && curl http://tendermint:26657/abci_query",
-  #       ]
-  #     interval: 3s
-  #     timeout: 5s
-  #     retries: 3
-  #   command: "bash .ci/entrypoint.sh"
-  #   restart: always
+  bigchaindb:
+    container_name: bigchaindb
+    depends_on:
+      - mongodb
+      - tendermint
+    build:
+      context: bigchaindb
+      dockerfile: Dockerfile-dev
+    # volumes:
+      # - ./bigchaindb:/usr/src/app/bigchaindb
+      # - ./tests:/usr/src/app/tests
+      # - ./docs:/usr/src/app/docs
+      # - ./htmlcov:/usr/src/app/htmlcov
+      # - ./setup.py:/usr/src/app/setup.py
+      # - ./setup.cfg:/usr/src/app/setup.cfg
+      # - ./pytest.ini:/usr/src/app/pytest.ini
+      # - ./tox.ini:/usr/src/app/tox.ini
+    environment:
+      BIGCHAINDB_DATABASE_BACKEND: localmongodb
+      BIGCHAINDB_DATABASE_HOST: mongodb
+      BIGCHAINDB_DATABASE_PORT: 27017
+      # BIGCHAINDB_DATABASE_LOGIN: "${MONGO_USER}"
+      # BIGCHAINDB_DATABASE_PASSWORD: "${MONGO_PASS}"
+      BIGCHAINDB_SERVER_BIND: 0.0.0.0:9984
+      BIGCHAINDB_WSSERVER_HOST: 0.0.0.0
+      BIGCHAINDB_WSSERVER_ADVERTISED_HOST: bigchaindb
+      BIGCHAINDB_TENDERMINT_HOST: tendermint
+      BIGCHAINDB_TENDERMINT_PORT: 26657
+    ports:
+      - "9984:9984"
+      - "9985:9985"
+      - "26658:26658"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "bash",
+          "-c",
+          "curl http://bigchaindb:9984 && curl http://tendermint:26657/abci_query",
+        ]
+      interval: 3s
+      timeout: 5s
+      retries: 3
+    command: "bash .ci/entrypoint.sh"
+    restart: always
     
-  # tendermint:
-  #   image: tendermint/tendermint:v0.31.5
-  #   container_name: tendermint
-  #   volumes:
-  #     - tm_data:/tendermint
-  #   entrypoint: ""
-  #   ports:
-  #     - "26656:26656"
-  #     - "26657:26657"
-  #   command: sh -c "tendermint init && tendermint node --consensus.create_empty_blocks=false --proxy_app=tcp://bigchaindb:26658"
-  #   restart: always
+  tendermint:
+    image: tendermint/tendermint:v0.31.5
+    container_name: tendermint
+    volumes:
+      - tm_data:/tendermint
+    entrypoint: ""
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+    command: sh -c "tendermint init && tendermint node --consensus.create_empty_blocks=false --proxy_app=tcp://bigchaindb:26658"
+    restart: always
 
   vault:
     container_name: vault
@@ -165,18 +165,18 @@ services:
       - server
     restart: always
  
-  # build_medicalgraph:
-  #   env_file:
-  #     - .env
-  #   build:
-  #     context: ./QA-engine/Knowledge-Base
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     NEO4J_URL: "neo4j"
-  #   depends_on: 
-  #     neo4j:
-  #       condition: service_healthy
-  #   restart: always
+  build_medicalgraph:
+    env_file:
+      - .env
+    build:
+      context: ./QA-engine/Knowledge-Base
+      dockerfile: Dockerfile
+    environment:
+      NEO4J_URL: "neo4j"
+    depends_on: 
+      neo4j:
+        condition: service_healthy
+    restart: always
 
   # nginx:
   #   container_name: "nginx"
