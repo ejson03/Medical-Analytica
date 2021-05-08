@@ -12,7 +12,7 @@ commonRouter.get('/', function (_req: Request, res: Response) {
 });
 
 commonRouter.get('/login', function (_req: Request, res: Response) {
-   return res.render('login.html');
+   return res.render('login.ejs');
 });
 commonRouter.get('/signup', function (_req: Request, res: Response) {
    return res.render('signup.ejs', { body: {}, error: null });
@@ -23,7 +23,10 @@ commonRouter.get('/chatbot', IsAuthenticated, (_req, res) => {
 });
 
 commonRouter.post('/signup', commonController.signUp);
-commonRouter.post('/login', passport.authenticate('app', { failureRedirect: '/login', successRedirect: '/home' }));
+commonRouter.post(
+   '/login',
+   passport.authenticate('app', { failureRedirect: '/login', successRedirect: '/home', failureFlash: 'Login failed' })
+);
 
 commonRouter.get('/home', IsAuthenticated, (req, res) => {
    if (req.user?.schema == 'Patient') {
