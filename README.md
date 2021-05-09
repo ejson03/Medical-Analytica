@@ -30,6 +30,13 @@ Make virtual env
 python3 -m venv rasa
 ```
 
+Make a folder dir
+```
+vault
+  - file
+  - unseal 
+Copy scripts/docker-entrypoint.sh here
+```
 
 Using eveything in Docker 
 ```

@@ -3,3 +3,6 @@
 **/.vscode
 **/__pycache__
 **/node_modules
+**/docker-compose.yml
+**/train_test_split
+**/results

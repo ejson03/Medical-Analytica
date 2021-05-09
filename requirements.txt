@@ -10,6 +10,5 @@ pillow
 bcrypt
 dateparser
 rasa==1.10.14
-pyahocorasick
 py2neo
-neo4j
+neo4time

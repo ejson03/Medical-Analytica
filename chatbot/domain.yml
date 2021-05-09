@@ -173,6 +173,11 @@ slots:
   weight:
     type: unfeaturized
     auto_fill: false
+  disease:
+    type: text
+  sure:
+    type: text
+  
 responses:
   utter_ask_age:
   - text: What is your age ?

@@ -12,10 +12,10 @@ tracker_store:
  
  
  # custom rasa tracker to tackle bson 16mb document limit
-#  tracker_store:
-#    type: custom.custom_tracker.GridTrackerStore
-#    url: mongodb://mongodb:27017
-#    db: rasa
+# tracker_store:
+#   type: mongod
+#   url: mongodb://mongodb:27017
+#   db: rasa
  
 #  event_broker:
 #    type: "pika"
