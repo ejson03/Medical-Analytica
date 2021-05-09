@@ -11,7 +11,7 @@ export const signUp = async (req: Request, res: Response) => {
    const users = await vaultService.getUsers(vault);
 
    if (users.includes(req.body.username) || !req.body.username) {
-      return res.render("signup.ejs", {body:req.body, error: "User already exists"});
+      return res.render('signup.ejs', { body: req.body, error: 'User already exists' });
    }
    try {
       const password = req.body.pass;
