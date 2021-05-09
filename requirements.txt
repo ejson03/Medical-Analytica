@@ -11,4 +11,4 @@ bcrypt
 dateparser
 rasa==1.10.14
 py2neo
-neo4time
+neotime
