@@ -3,6 +3,9 @@ from .config import *
 import difflib
 import random
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 ROOT_DIR= os.getcwd()
 
@@ -11,12 +14,11 @@ disease_names = [i.strip() for i in open(disease_file, 'r', encoding='UTF-8').re
 
 try:
     graph = Graph(
-            host=NEO4J_STRING,
-            http_port=7474,
-            user=NEO4J_USERNAME,
-            password= NEO4J_PASSWORD)
+            host = os.getenv("NEO4J_URL") or "localhost",  
+            port = int(os.getenv("NEO4J_PORT") or 7687),  
+            user = os.getenv("NEO4J_USER") or None,  
+            password = os.getenv("NEO4J_PASSWORD") or None)
 except Exception as e:
-    print(e)
     import sys
     sys.exit(-1)
 

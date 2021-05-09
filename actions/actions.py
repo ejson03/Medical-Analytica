@@ -20,39 +20,13 @@ load_dotenv()
 
 ROOT_DIR = os.getcwd()
 
-APP_URL= os.environ.get("WEATHER_KEY")
+APP_URL= os.environ.get("APP_URL")
 WEATHER_KEY= os.environ.get("WEATHER_KEY")
 WEATHER_ID= os.environ.get("WEATHER_ID")
 
 client = MongoClient(os.getenv("MONGO_URL"))
 disease_file = ROOT_DIR + '/actions/assets/disease.txt'
 disease_names = [i.strip() for i in open(disease_file, 'r', encoding='UTF-8').readlines()]
-
-try:
-    graph = Graph(
-            host = os.getenv("NEO4J_URL") or "localhost",  
-            port = int(os.getenv("NEO4J_PORT") or 7687),  
-            user = os.getenv("NEO4J_USER") or None,  
-            password = os.getenv("NEO4J_PASSWORD") or None)
-except Exception as e:
-    import sys
-    sys.exit(-1)
-
-
-def retrieve_disease_name(name):
-    names = []
-    print(name)
-    name = '.*' + name + '.*'
-    import re
-    print(name)
-    pattern = re.compile(name)
-    for i in disease_names:
-        candidate = pattern.search(i)
-        if candidate:
-            print(candidate)
-            names.append(candidate.group())
-    print(names)
-    return names
 
 
 def make_button(title, payload):
