@@ -47,8 +47,6 @@ def create_illness_vector(encoded_symptoms):
 
         number_of_symptoms_flagged = len(symptoms_df.loc[symptoms_df['similarity'] > threshold, 'symptom_flagged'])
 
-        # logging.info(f"Flagged {number_of_symptoms_flagged} potential symptom matches")
-
     return list(symptoms_df['symptom_flagged'])
 
 
@@ -73,7 +71,6 @@ def get_diagnosis(illness_vector):
             .iloc[0]
         )
 
-        # logging.info(f"Diagnosing user with {illness}")
         diagnosis_string = f"Based on your symptoms it looks like you could have {illness}"
 
     else:
@@ -82,8 +79,6 @@ def get_diagnosis(illness_vector):
             .sort_values(by='similarity', ascending=False)[['illness', 'similarity']]
             .head(1)
         )
-        # logging.info(f"Unable to find a diagnosis, the closest match was {closest_match['illness'].iloc[0]} "
-        #              f"at {closest_match['similarity'].iloc[0]}")
         diagnosis_string = "Unfortunately I am unable to diagnose you based on the symptoms you provided"
 
     return diagnosis_string
