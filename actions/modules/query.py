@@ -1,5 +1,4 @@
 from py2neo import Graph
-from .config import *
 import difflib
 import random
 import os
@@ -7,9 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-ROOT_DIR= os.getcwd()
+disease_file = "./assets/disease.txt"
 
-disease_file = ROOT_DIR + '/action/assets/disease.txt'
 disease_names = [i.strip() for i in open(disease_file, 'r', encoding='UTF-8').readlines()]
 
 try:

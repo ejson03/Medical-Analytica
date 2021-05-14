@@ -8,8 +8,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 nlp = spacy.load('en_core_web_md')
 ROOT_DIR = os.getcwd()
 
-diagnosis_df = pd.read_pickle(ROOT_DIR + "/actions/assets/pickle/diagnosis_data.pkl")
-symptoms_df = pd.read_pickle(ROOT_DIR + "/actions/assets/pickle/symptoms.pkl")
+diagnosis_df = pd.read_pickle("./assets/pickle/diagnosis_data.pkl")
+symptoms_df = pd.read_pickle("./assets/pickle/symptoms.pkl")
 
 
 def encode_symptom(symptom):

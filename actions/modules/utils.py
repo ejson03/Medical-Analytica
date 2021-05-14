@@ -7,8 +7,7 @@ import urllib.parse
 import re
 from modules.quotes import get_base64
 
-ROOT_DIR = os.getcwd()
-path = ROOT_DIR + "/actions/assets/json/"
+path = "./assets/json/"
 
 
 def get_url(query):

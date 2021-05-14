@@ -189,18 +189,18 @@ services:
   #   depends_on:
   #     - server
 
-  build_medicalgraph:
-    env_file:
-      - .env
-    build:
-      context: ./QA-engine/Knowledge-Base
-      dockerfile: Dockerfile
-    environment:
-      NEO4J_URL: "neo4j"
-    depends_on: 
-      neo4j:
-        condition: service_healthy
-    restart: always
+  # build_medicalgraph:
+  #   env_file:
+  #     - .env
+  #   build:
+  #     context: ./QA-engine/Knowledge-Base
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     NEO4J_URL: "neo4j"
+  #   depends_on: 
+  #     neo4j:
+  #       condition: service_healthy
+  #   restart: always
 
 volumes:
   tm_data: {}

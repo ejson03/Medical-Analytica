@@ -3,8 +3,6 @@ from PIL import Image, ImageFont, ImageDraw
 import io, base64, os
 import random
 
-ROOT_DIR = os.getcwd()
-
 def get_base64(quote):
     img = write_image(quote)
     buf = io.BytesIO()
@@ -13,12 +11,12 @@ def get_base64(quote):
     return img
 
 def select_background_image():
-    path = ROOT_DIR + "/actions/assets/images/"
+    path = "./assets/images/"
     options = os.listdir(path)
     return path + random.choice(options)
 
 def select_font():
-    prefix = ROOT_DIR + "/actions/assets/fonts/"
+    prefix = "./assets/fonts/"
     options = os.listdir(prefix)
     return prefix + random.choice(options)
 

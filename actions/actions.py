@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from modules.utils import *
-from modules.query import *
 from modules.diagnose import encode_symptom, create_illness_vector, get_diagnosis
+from modules.query import *
 import dateparser as ddp
 import os, requests, base64, uuid
 from os import environ
@@ -25,8 +25,6 @@ WEATHER_KEY= os.environ.get("WEATHER_KEY")
 WEATHER_ID= os.environ.get("WEATHER_ID")
 
 client = MongoClient(os.getenv("MONGO_URL"))
-disease_file = ROOT_DIR + '/actions/assets/disease.txt'
-disease_names = [i.strip() for i in open(disease_file, 'r', encoding='UTF-8').readlines()]
 
 
 def make_button(title, payload):
