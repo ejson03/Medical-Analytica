@@ -75,11 +75,13 @@ services:
   #   command: sh -c "tendermint init && tendermint node --consensus.create_empty_blocks=false --proxy_app=tcp://bigchaindb:26658"
   #   restart: always
 
-   bigchaindb:
+  bigchaindb:
     container_name: bigchaindb 
+    # image: bigchain:all
     build:
       context: bigchaindb
       dockerfile: Dockerfile-all-in-one
+    command: bash ./pkg/scripts/all-in-one.bash
     ports:
       - "9984:9984"
       - "9985:9985"
