@@ -27,7 +27,7 @@
                       <tr>
                           <% if(record.operation != "TRANSFER") { %>
                           <td><label class="text-warning "> <%= record.operation %> </label></td>
-                          <td><button type="button" rel="tooltip" title=" Access Granted" class="btn btn-danger btn-link btn-sm"><i class="material-icons-two-tone">add</i></button></td>
+                          <td><button type="button" rel="tooltip" title=" Access Granted" class="btn btn-danger btn-link btn-sm"><i class="material-icons-two-tone ">add</i></button></td>
                           <td><label class="float-right text-warning "><%= record.date %></label></td>
                           <%} else { %> 
                           <td><label class="text-warning "> <%= record.operation %> </label><br>
@@ -41,9 +41,9 @@
                             </p>
                             <td>
                               <% if(record.operation == "TRANSFER"){ %>
-                                <button type="button" rel="tooltip" title=" Access Granted" class="btn btn-danger btn-link btn-sm"><i class="material-icons ">visibility</i></button></td>
+                                <button type="button" rel="tooltip" title=" Access Granted" class="btn btn-danger btn-link btn-sm"><i class="material-icons-two-tone ">visibility</i></button></td>
                               <% } else{ %>  
-                                <button type="button" rel="tooltip" title=" Access Revoked" class="btn btn-danger btn-link btn-sm"><i class="material-icons-two-tone">visibility_off</i></button></td>
+                                <button type="button" rel="tooltip" title=" Access Revoked" class="btn btn-danger btn-link btn-sm"><i class="material-icons-two-tone ">visibility_off</i></button></td>
                              <% } %>
                               
                             <td><label class="float-right text-warning"><%= record.date %></label></td>
