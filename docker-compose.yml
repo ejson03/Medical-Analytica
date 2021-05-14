@@ -101,8 +101,8 @@ services:
       - 5000:5000
     restart: always
     depends_on:
-      - vault
       - server
+      - vault
 
   # nginx:
   #   container_name: "nginx"
