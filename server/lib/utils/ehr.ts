@@ -124,8 +124,7 @@ export const createRecord = async (
    const id = cryptoService.generateCode();
    const date = new Date().toString();
    if (email === 'rasa') {
-      const ipfsURL = await createIPFSHashFromCipher(fileBuffer as string);
-      const ipfsURLEncrypted = cryptoService.encrypt(ipfsURL, secretKey);
+      const ipfsURLEncrypted = cryptoService.encrypt(fileBuffer, secretKey);
       Object.assign(data, {
          file: ipfsURLEncrypted,
          fileHash: cryptoService.hash(ipfsURLEncrypted),

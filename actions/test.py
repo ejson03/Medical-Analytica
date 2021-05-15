@@ -1,10 +1,15 @@
 from py2neo import Graph,Node,Relationship
+import pandas as pd
 from modules.config import * 
 import difflib
 import random
+import time
+
 
 disease_file = './assets/disease.txt'
+fileName = "./assets/medical_kb.csv"
 disease_names = [i.strip() for i in open(disease_file, 'r', encoding='UTF-8').readlines()]
+df = pd.read_csv(fileName)
 
 try:
     graph = Graph(
@@ -30,12 +35,8 @@ def retrieve_disease_name(name):
 
 def get_disease(disease):
     possible_diseases = list(difflib.get_close_matches(disease, disease_names))
-    print("o"*50)
-    print(possible_diseases)
     if len(possible_diseases) == 0:
         possible_diseases = retrieve_disease_name(disease)
-        print("y"*50)
-        print(possible_diseases)
     return possible_diseases
 
 
@@ -66,8 +67,24 @@ def department(disease):
     disease = random.choice(disease)
     a = graph.run("match (a:Disease{name: $disease})-[:belongs_to]->(s:Department) return s.name",
                         disease=disease).data()[0]['s.name']
-    print(a)
-   
+ 
 
-department("poisoning")
+
+def csv_query(disease):
+    disease = get_disease(disease)
+    disease = random.choice(disease)
+    result = df.loc[df['name'] == disease]
+  
+start = time.time()
+for i in range(10000):
+    csv_query("poisoning")
+end = time.time()
+print(end - start)
+
+start = time.time()
+for i in range(10000):
+    department("poisoning")
+end = time.time()
+print(end - start)
+
 
