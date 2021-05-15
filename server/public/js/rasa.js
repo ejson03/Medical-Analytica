@@ -352,7 +352,7 @@ function setBotResponse(val) {
                            <td>
                              <form method="post" action="/view">
                               <input type="hidden" name="status" value="encrypted"> 
-                                <button type="submit" rel="tooltip" title="File" class="btn btn-danger btn-link btn-sm" value="${record.data.file}" name="fileURL" target="_blank">
+                                <button type="submit" rel="tooltip" title="File" class="btn btn-danger btn-link btn-sm" value="${record.data.file}" name="fileURL" formtarget="_blank">
                                  <i class="material-icons">attachment</i>
                                 </button>
                              </form> 
