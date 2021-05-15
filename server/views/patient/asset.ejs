@@ -40,12 +40,8 @@
                                 <% } %>
                             </p>
                             <td>
-                              <% if(record.operation == "TRANSFER"){ %>
-                                <button type="button" rel="tooltip" title=" Access Granted" class="btn btn-danger btn-link btn-sm"><i class="material-icons-two-tone ">visibility</i></button></td>
-                              <% } else{ %>  
-                                <button type="button" rel="tooltip" title=" Access Revoked" class="btn btn-danger btn-link btn-sm"><i class="material-icons-two-tone ">visibility_off</i></button></td>
-                             <% } %>
-                              
+                              <button type="button" rel="tooltip" title=" Access Revoked" class="btn btn-danger btn-link btn-sm"><i class="material-icons-two-tone ">TRANSFER OPERATION</i></button>
+                            </td> 
                             <td><label class="float-right text-warning"><%= record.date %></label></td>
                            <% } %>
                            <% } %>
