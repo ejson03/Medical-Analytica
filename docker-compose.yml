@@ -184,6 +184,18 @@ services:
       - vault
       - server
  
+  build_medicalgraph:
+    env_file:
+      - .env
+    build:
+      context: ./QA-engine/Knowledge-Base
+      dockerfile: Dockerfile
+    environment:
+      NEO4J_URL: "neo4j"
+    depends_on: 
+      neo4j:
+        condition: service_healthy
+    # restart: always
 
   # nginx:
   #   container_name: "nginx"
