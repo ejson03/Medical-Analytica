@@ -120,7 +120,7 @@ export const assetHistory = async (req: Request, res: Response) => {
 };
 
 export const addRecord = async (req: Request, res: Response) => {
-   if (req.files.length < 1) {
+   if (req.files == null || req.files.length < 1) {
       return res.status(404).json({ status: 'File not uploaded' });
    }
    let fields = req.body;
