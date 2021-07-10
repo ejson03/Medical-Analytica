@@ -14,7 +14,7 @@ services:
 
   vault:
     container_name: vault
-    image: "vault"
+    image: vault:1.7.1
     env_file:
       - .env
     ports:
@@ -23,6 +23,8 @@ services:
       - "IPC_LOCK"
     environment:
       VAULT_LOCAL_CONFIG: '{"backend" : {"file" : {"path" : "/vault/file"}}}'
+      VAULT_SUPPLEMENTAL_CONFIG: '{"ui":true, "listener": {"tcp":{"address": "0.0.0.0:8200", "tls_disable": 1}}}'
+      VAULT_ADDR: "http://127.0.0.1:8200"
     volumes:
       - vault_config:/vault/config
       - vault_policies:/vault/policies
@@ -125,7 +127,7 @@ services:
     depends_on: 
       neo4j:
         condition: service_healthy
-    restart: always
+    # restart: always
 
 volumes:
   tm_data: {}
